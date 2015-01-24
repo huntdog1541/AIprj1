@@ -21,7 +21,6 @@ public class BlindWalk {
 		xboundary = mps.getXboundary();
 		yboundary = mps.getYboundary();
 		direction = 0;
-		rand = new Random();
 		move();
 	}
 	

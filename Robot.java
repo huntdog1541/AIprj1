@@ -30,7 +30,7 @@ public class Robot {
 	public static void main(String[] args) {
 		System.out.println("Hello Start");
 		Robot robby = new Robot();
-		//Graph gph = new Graph();
+		Graph gph = new Graph();
 		
 		
 	}
