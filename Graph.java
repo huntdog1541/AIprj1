@@ -12,7 +12,7 @@ public class Graph {
 	{
 		frame = new JFrame("Robot");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(new BorderLayout());
+		frame.setLayout(new GridLayout(16, 16));
 		frame.add(new Pane());
 		frame.pack();
 		frame.setVisible(true);
