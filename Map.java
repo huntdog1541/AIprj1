@@ -147,4 +147,67 @@ public class Map {
 		return yboundary;
 	}
 	
+	public boolean onObstacle(int xpost, int ypost)
+	{
+		boolean ans = false;
+		if((arry[xpost][ypost]).isObstacle())
+			ans = true;
+		return ans;
+	}
+	
+	public boolean onAgen(int xpost, int ypost)
+	{
+		boolean ans = false;
+		if((arry[xpost][ypost]).isAgent())
+			ans = true;
+		return ans;
+	}
+	
+	public boolean onTreasure(int xpost, int ypost)
+	{
+		boolean ans = false;
+		if((arry[xpost][ypost]).isTreasure())
+			ans = true;
+		return ans;
+	}
+	
+	public boolean onEntry(int xpost, int ypost)
+	{
+		boolean ans = false;
+		if((arry[xpost][ypost]).isEntry())
+			ans = true;
+		return ans;
+	}
+	
+	public boolean checkObstacle(int xpost, int ypost)
+	{
+		boolean ans = false;
+		if((arry[xpost][ypost]).isObstacle())
+			ans = true;
+		return ans;
+	}
+	
+	public boolean checkAgent(int xpost, int ypost)
+	{
+		boolean ans = false;
+		if((arry[xpost][ypost]).isAgent())
+			ans = true;
+		return ans;
+	}
+	
+	public boolean checkTreasure(int xpost, int ypost)
+	{
+		boolean ans =false;
+		if((arry[xpost][ypost]).isTreasure)
+			ans = true;
+		return ans;
+	}
+	
+	public boolean checkEntry(int xpost, int ypost)
+	{
+		boolean ans = false;
+		if((arry[xpost][ypost]).isEntry())
+			ans = true;
+		return ans;
+	}
 }
