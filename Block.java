@@ -6,7 +6,7 @@ public class Block {
 	boolean isAgent;
 	boolean isEntry;
 	
-	public Block()
+	public Block() 
 	{
 		isObstacle = false;
 		isTreasure = false;
