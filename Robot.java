@@ -6,7 +6,8 @@ public class Robot {
 	int xposition;
 	int yposition;
 	int steps;
-	Map map;
+	boolean alive;
+	static Map map;
 	static Movement move;
 	
 	public Robot()
@@ -16,6 +17,7 @@ public class Robot {
 		xposition = 0;
 		yposition = 0;
 		steps = 0;
+		alive = true;
 	}
 	
 	public Robot(int x, int y)
@@ -30,7 +32,7 @@ public class Robot {
 	public static void main(String[] args) {
 		System.out.println("Hello Start");
 		Robot robby = new Robot();
-		Graph gph = new Graph();
+		Graph gph = new Graph(map, map.getXboundary(), map.getYboundary());
 		
 		
 	}
@@ -62,11 +64,23 @@ public class Robot {
 		this.steps = steps;
 	}
 
+	public boolean isAlive() {
+		alive = checkAlive();
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
 	public boolean checkAlive()
 	{
 		boolean ans = true;
-		if(map.checkAgent(xposition, yposition))
-			ans = false;
+		if(map.valid(xposition, yposition))
+		{
+			if(map.checkAgent(xposition, yposition))
+				ans = false;
+		}
 		return ans;
 	}
 	
