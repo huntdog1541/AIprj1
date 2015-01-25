@@ -1,5 +1,7 @@
 import java.util.Random;
 
+import javax.swing.JPanel;
+
 
 public class Map {
 	
@@ -182,14 +184,19 @@ public class Map {
 	public boolean checkObstacle(int xpost, int ypost)
 	{
 		boolean ans = false;
-		if((arry[xpost][ypost]).isObstacle())
-			ans = true;
+		if(valid(xpost, ypost))
+		{
+			if((arry[xpost][ypost]).isObstacle())
+				ans = true;
+		}
 		return ans;
 	}
 	
 	public boolean checkAgent(int xpost, int ypost)
 	{
 		boolean ans = false;
+		if(valid(xpost, ypost))
+			
 		if((arry[xpost][ypost]).isAgent())
 			ans = true;
 		return ans;
@@ -207,6 +214,22 @@ public class Map {
 	{
 		boolean ans = false;
 		if((arry[xpost][ypost]).isEntry())
+			ans = true;
+		return ans;
+	}
+	
+	public JPanel getPaneling(int xpst, int ypst)
+	{
+		JPanel jp = (arry[xpst][ypst]).getPane();
+		return jp;
+	}
+	
+	public boolean valid(int xpost, int ypost)
+	{
+		boolean ans = false;
+		if((xpost > xboundary) && (xpost < 0))
+			ans = true;
+		if((ypost > yboundary) && (ypost < 0))
 			ans = true;
 		return ans;
 	}
