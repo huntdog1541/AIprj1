@@ -30,6 +30,7 @@ public class Map {
 		placeTreasure();
 		placeObstacles();
 		placeAgents();
+		pickEntry();
 	}
 	
 	public Map(int x, int y)
@@ -46,26 +47,48 @@ public class Map {
 		placeTreasure();
 		placeObstacles();
 		placeAgents();
+		pickEntry();
 	}
 	
 	public void pickEntry()
 	{
 		boolean ans = false;
-		int xpost, ypost;
-		ans = rand.nextBoolean();
-		if(ans == false)
+		int xpost = 0, ypost = 0, bord = rand.nextInt(4);
+		System.out.println("bord: " + bord);
+		while(ans == false)
 		{
-			xpost = 0;
-			ypost = rand.nextInt(yboundary);
+			if(bord == 0)
+				ypost = rand.nextInt(yboundary);
+			else if(bord == 1)
+				xpost = rand.nextInt(xboundary);
+			else if(bord == 2)
+			{
+				xpost = xboundary - 1;
+				ypost = rand.nextInt(yboundary);
+			}
+			else if(bord == 3)
+			{
+				ypost = yboundary - 1;
+				xpost = rand.nextInt(xboundary);
+			}
+			ans = notEntry(xpost, ypost);
 		}
-		else
-		{
-			xpost = rand.nextInt(xboundary);
-			ypost = 0;
-		}
+		System.out.println("X post: " + xpost + " Y post: " + ypost);
 		arry[xpost][ypost].setEntry(true);
 	}
 	
+	public boolean notEntry(int xpost, int ypost)
+	{
+		boolean ans = true;
+		if((arry[xpost][ypost]).isAgent())
+			ans = false;
+		else if((arry[xpost][ypost]).isObstacle())
+			ans = false;
+		else if((arry[xpost][ypost]).isTreasure())
+			ans = false;
+		
+		return ans;
+	}
 	
 	public void initArray()
 	{
