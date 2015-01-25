@@ -15,7 +15,6 @@ public class Graph {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(16, 16));
-		//frame.add(new Pane());
 		updateGraph();
 		frame.pack();
 		frame.setVisible(true);
@@ -27,7 +26,6 @@ public class Graph {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(xbound, ybound));
-		//frame.add(new Pane());
 		updateGraph();
 		frame.pack();
 		frame.setVisible(true);
