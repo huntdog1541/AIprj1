@@ -73,21 +73,31 @@ public class BlindWalk {
 	{
 		if(xposition == xboundary)
 			return;
-		//else()
+		System.out.println("Moving North");
+		if(map.valid(xposition - 1 , yposition))
+			rby.setXposition(xposition - 1);
+		if(rby.isAlive())
+		{
+			
+		}
+		else
+		{
+			rby.setAlive(false);
+		}
 	}
 	
 	public void moveSouth()
 	{
-		
+		System.out.println("Moving South");
 	}
 	
 	public void moveEast()
 	{
-		
+		System.out.println("Moving East");
 	}
 	
 	public void moveWest()
 	{
-		
+		System.out.println("Moving West");
 	}
 }
