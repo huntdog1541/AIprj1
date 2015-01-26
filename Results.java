@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 
 public class Results {
 
@@ -6,6 +8,7 @@ public class Results {
 	private double percentWin;
 	private double percentLose;
 	private int totalRuns;
+	private ArrayList<Stats> list;
 	
 	
 	public Results()
@@ -15,6 +18,17 @@ public class Results {
 		percentWin = 0.0;
 		percentLose = 0.0;
 		totalRuns = 1;
+		list = new ArrayList<Stats>();
+	}
+	
+	public Results(int numOfRuns)
+	{
+		st = new Stats(numOfRuns);
+		currentRun = 1;
+		percentWin = 0.0;
+		percentLose = 0.0;
+		totalRuns = numOfRuns;
+		list = new ArrayList<Stats>();
 	}
 
 
