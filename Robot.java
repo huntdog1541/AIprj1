@@ -31,7 +31,7 @@ public class Robot {
 	
 	public static void main(String[] args) {
 		System.out.println("Hello Start");
-		Results res = new Results();
+		Results res = new Results(16);
 		Robot robby = new Robot();
 		Graph gph = new Graph(map, map.getXboundary(), map.getYboundary());
 		
