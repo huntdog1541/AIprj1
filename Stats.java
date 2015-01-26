@@ -13,6 +13,14 @@ public class Stats {
 		fails = 0;
 		totalSteps = 0;
 	}
+	
+	public Stats(int run)
+	{
+		runs = 1;
+		success = 0;
+		fails = 0;
+		totalSteps = run;
+	}
 
 	public int getRuns() {
 		return runs;
