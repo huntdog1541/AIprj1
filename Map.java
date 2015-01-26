@@ -104,7 +104,7 @@ public class Map {
 	
 	public void placeObstacles()
 	{
-		int i, xpost, ypost;
+		int i, xpost = 0, ypost = 0;
 		boolean placed = false;
 		for(i = 0; i < numObstacle; i++)
 		{
@@ -117,17 +117,15 @@ public class Map {
 				if((arry[xpost][ypost].isTreasure()) == true)
 					placed = false;
 				if((arry[xpost][ypost].isObstacle()) == false)
-				{
 					placed = true;
-					arry[xpost][ypost].setObstacle(true);
-				}
 			}while(placed == false);
 		}
+		arry[xpost][ypost].setObstacle(true);
 	}
 	
 	public void placeAgents()
 	{
-		int i, xpost, ypost;
+		int i, xpost = 0, ypost = 0;
 		boolean placed = false;
 		for(i = 0; i < numAgents; i++)
 		{
@@ -140,23 +138,25 @@ public class Map {
 				if((arry[xpost][ypost].isTreasure()) == true)
 					placed = false;
 				if((arry[xpost][ypost].isAgent()) == false)
-				{
 					placed = true;
-					arry[xpost][ypost].setAgent(true);
-				}
 			}while(placed == false);
 		}
+		arry[xpost][ypost].setAgent(true);
 	}
 	
 	public void placeTreasure()
 	{
 		boolean placed = false;
-		int xpost, ypost;
+		int xpost = 0, ypost = 0;
 		do
 		{
 			xpost = rand.nextInt(xboundary);
 			ypost = rand.nextInt(yboundary);
-			if((arry[xpost][ypost].isEntry) == false)
+			if((arry[xpost][ypost].isObstacle()) == true)
+				placed = false;
+			if((arry[xpost][ypost].isAgent()) == false)
+				placed = true;
+			if((arry[xpost][ypost].isEntry()) == false)
 				placed = true;
 		}while(placed == false);
 		arry[xpost][ypost].setTreasure(true);
@@ -254,6 +254,14 @@ public class Map {
 			ans = true;
 		if((ypost > yboundary) && (ypost < 0))
 			ans = true;
+		return ans;
+	}
+	
+	public boolean validStep(int xpost, int ypost)
+	{
+		boolean ans = true;
+		if((arry[xpost][ypost]).isObstacle() == true)
+			ans = false;
 		return ans;
 	}
 }
