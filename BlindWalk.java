@@ -1,51 +1,115 @@
 import java.util.Random;
 
+
 public class BlindWalk {
 
+	
 	private int xposition;
 	private int yposition;
 	private int xboundary;
 	private int yboundary;
 	private int direction;
-	Robot rby;
+	Robot robby;
 	Map map;
 	Random rand;
 	
-	public BlindWalk(Robot robby, Map mps)
+	public BlindWalk(Robot rby, Map mps)
 	{
-		rby = robby;
+		robby = rby;
 		map = mps;
 		xposition = robby.getXposition();
 		yposition = robby.getYposition();
-		rand = new Random();
-		xboundary = mps.getXboundary();
-		yboundary = mps.getYboundary();
+		xboundary = mps.getboundary();
+		yboundary = mps.getboundary();
 		direction = 0;
+		rand = new Random();
 		move();
 	}
+	
+	//initializes the move loops that search for the treasure loop and entry loop
+	public void move()
+	{
+		getTreasure();
+		if(robby.isAlive())
+			System.out.println("The number of steps to find the treasure " + robby.getSteps());
+		findEntry();
+		System.out.println("The number of steps is " + robby.getSteps());
+	}
+	
+	//
+	public void getTreasure()
+	{
+		int nextX = xposition, nextY = yposition;
+		dirct nextDirection = dirct.EAST;
+		while((robby.isAlive()) && (!robby.hasTreasure()) && (robby.getSteps() < 10000))
+		{
+			nextX = xposition;
+			nextY = yposition;
+			nextDirection = getDirection();
+			switch(nextDirection)
+			{
+				case NORTH :
+					if(seekNorth(nextY, nextX))
+						moveNorth(nextY, nextX);
+					break;
+				case SOUTH:
+					if(seekSouth(nextY, nextX))
+						moveSouth(nextY, nextX);
+					break;
+				case EAST: 
+					if(seekEast(nextY, nextX))
+						moveEast(nextY, nextX);
+					break;
+				case WEST: 
+					if(seekWest(nextY, nextX))
+						moveWest(nextY, nextX);
+					break;
+			}
+			System.out.println("Y: " + yposition + " X: " + xposition);
+		}
+	}
+	
+	private void updatePosition()
+	{	
+		robby.setXposition(xposition);
+		robby.setYposition(yposition);
+	}
+
+	public void findEntry()
+	{
+		int nextX = xposition, nextY = yposition;
+		dirct nextDirection = dirct.EAST;
+		while((robby.isAlive()) && (!robby.atEntry()) && (robby.getSteps() < 10000))
+		{
+			nextX = xposition;
+			nextY = yposition;
+			nextDirection = getDirection();
+			switch(nextDirection)
+			{
+				case NORTH :
+					if(seekNorth(nextY, nextX))
+						moveNorth(nextY, nextX);
+				case SOUTH:
+					if(seekSouth(nextY, nextX))
+						moveSouth(nextY, nextX);
+					break;
+				case EAST: 
+					if(seekEast(nextY, nextX))
+						moveEast(nextY, nextX);
+					break; 
+				case WEST: 
+					if(seekWest(nextY, nextX))
+						moveWest(nextY, nextX);
+					break;
+			}
+			System.out.println("Y: " + yposition + " X: " + xposition);
+		}
+	}
+	
 	
 	public enum dirct
 	{
 		NORTH, SOUTH, EAST, WEST
-	}
-	
-	public void moving()
-	{
-		
-	}
-	
-	public void move()
-	{
-		updatePosition();
-		dirct drt = dirct.NORTH;
-		drt = getDirection();
-		switch(drt)
-		{
-		case NORTH: moveNorth(); break;
-		case SOUTH: moveSouth(); break;
-		case EAST: moveEast(); break;
-		case WEST: moveWest(); break;
-		}
 	}
 	
 	public dirct getDirection()
@@ -54,50 +118,114 @@ public class BlindWalk {
 		dirct dt = dirct.NORTH;
 		if(direction == 1)
 			dt = dirct.NORTH;
-		if(direction == 2)
+		else if(direction == 2)
 			dt = dirct.SOUTH;
-		if(direction == 3)
+		else if(direction == 3)
 			dt = dirct.EAST;
-		if(direction == 4)
+		else if(direction == 4)
 			dt = dirct.WEST;
 		return dt;
 	}
 	
-	public void updatePosition()
+	public boolean seekNorth(int currY, int currX)
 	{
-		xposition = rby.getXposition();
-		yposition = rby.getYposition();
+		int tempY = currY , tempX = currX - 1;
+		boolean ans = true;
+		if(!map.isValidMove(tempY, tempX))
+			ans = false;		
+		return ans;
 	}
 	
-	public void moveNorth()
+	public boolean seekSouth(int currY, int currX)
 	{
-		if(xposition == xboundary)
-			return;
-		System.out.println("Moving North");
-		if(map.valid(xposition - 1 , yposition))
-			rby.setXposition(xposition - 1);
-		if(rby.isAlive())
+		int tempY = currY , tempX = currX + 1;
+		boolean ans = true;
+		if(!map.isValidMove(tempY, tempX))
+			ans = false;		
+		return ans;
+	}
+	
+	public boolean seekEast(int currY, int currX)
+	{
+		int tempY = currY + 1, tempX = currX;
+		boolean ans = true;
+		if(!map.isValidMove(tempY, tempX))
+			ans = false;		
+		return ans;
+	}
+	
+	public boolean seekWest(int currY, int currX)
+	{
+		int tempY = currY - 1, tempX = currX;
+		boolean ans = true;
+		if(!map.isValidMove(tempY, tempX))
+			ans = false;		
+		return ans;
+	}
+	
+	//function that lets the robot know if it can move there or not due to a obstacle
+	public boolean canMove(int nextY, int nextX)
+	{
+		boolean ans = true;
+		if(map.isValidMove(nextY, nextX))
 		{
-			
+			if(map.isMoveBlocked(nextY, nextX))
+				ans = false;
 		}
-		else
+		return ans;
+	}
+	
+	public String getDirectionString(dirct direction)
+	{
+		String temp = null;
+		if(direction == dirct.NORTH)
+			temp = "North";
+		else if(direction == dirct.SOUTH)
+			temp = "South";
+		else if(direction == dirct.EAST)
+			temp = "East";
+		else if(direction == dirct.WEST)
+			temp = "West";
+		return temp;
+	}
+	
+	public void moveNorth(int nextY, int nextX)
+	{
+		int tempY = nextY, tempX = nextX - 1;
+		moveSteps(tempY, tempX);
+	}
+	
+	public void moveSouth(int nextY, int nextX)
+	{
+		int tempY = nextY, tempX = nextX + 1;
+		moveSteps(tempY, tempX);
+	}
+	
+	public void moveEast(int nextY, int nextX)
+	{
+		int tempY = nextY + 1, tempX = nextX;
+		moveSteps(tempY, tempX);
+	}
+	
+	public void moveWest(int nextY, int nextX)
+	{
+		int tempY = nextY - 1, tempX = nextX;
+		moveSteps(tempY, tempX);
+	}
+	
+	public void moveSteps(int tempY, int tempX) 
+	{
+		if(map.isValidMove(tempY, tempX))
 		{
-			rby.setAlive(false);
+			if(canMove(tempY, tempX))
+			{
+				xposition = tempX;
+				yposition = tempY;
+				this.updatePosition();
+				robby.checkAlive();
+			}
+			robby.increaseStep(tempY, tempX);
+			robby.pickUpTreasure();
 		}
-	}
-	
-	public void moveSouth()
-	{
-		System.out.println("Moving South");
-	}
-	
-	public void moveEast()
-	{
-		System.out.println("Moving East");
-	}
-	
-	public void moveWest()
-	{
-		System.out.println("Moving West");
 	}
 }
