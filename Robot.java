@@ -1,88 +1,123 @@
-
+import java.util.Scanner;
 
 
 public class Robot {
 	
-	int xposition;
-	int yposition;
-	int steps;
-	boolean alive;
-	static Map map;
-	static Movement move;
+	int xposition;			//x-position of the robot
+	int yposition;			//y-position of the robot
+	int steps;				//the number of steps that the robot takes
+	boolean alive;			//is the robot alive?
+	boolean treasure;		//does the robot has the treasure?
+	Map map;				//Map class that generates the map
+	Movement move;			//move class that decides how the robot moves around the map
 	
-	public Robot()
+	//constructor functions
+	public Robot(Map mps)
 	{
-		map = new Map();
-		move = new Movement(this, map);
 		xposition = 0;
 		yposition = 0;
-		steps = 0;
+		steps = 1;
 		alive = true;
+		treasure = false;
+		map = mps;
+		move = new Movement();
 	}
-	
-	public Robot(int x, int y)
-	{
-		map = new Map(x, y);
-		move = new Movement(this, map);
-		xposition = 0;
-		yposition = 0;
-		steps = 0;
-	}
+
 	
 	public static void main(String[] args) {
-		System.out.println("Hello Start");
-		Results res = new Results(16);
-		Robot robby = new Robot();
-		Graph gph = new Graph(map, map.getXboundary(), map.getYboundary());
-		
-		
-	}
-
-	public int getXposition()
-	{
-		return xposition;
+		System.out.print("How many rows: ");
+		Scanner in = new Scanner(System.in);
+		int boundary = in.nextInt();
+		double obsPer = .20;
+		double agPer = .10;
+		Map mp = new Map(boundary, obsPer, agPer);
+		Robot robby = new Robot(mp);
+		robby.setWalking();
+		Graphs gph = new Graphs(mp);
+		in.close();
 	}
 	
-	public int getYposition()
+	//setWalking() - initializes the blindWalk functions
+	public void setWalking()
 	{
-		return yposition;
+		move.setMovement(this, map);
 	}
 
+	//return x-position of the robot
+	public int getXposition() {
+		return xposition;
+	}
+
+	//sets the x-position of the robot
 	public void setXposition(int xposition) {
 		this.xposition = xposition;
 	}
 
+	//returns the y-position of the robot
+	public int getYposition() {
+		return yposition;
+	}
+
+	//sets the y-position of the robot
 	public void setYposition(int yposition) {
 		this.yposition = yposition;
 	}
 	
+	//checks the map to see if the robot is on a dangerous square
+	public void checkAlive()
+	{
+		if(map.isStandingOnAgent(yposition, xposition))
+		{
+			alive = false;
+			System.out.println("Robby is dead\n");
+		}
+	}
 	
-	public int getSteps() {
-		return steps;
-	}
-
-	public void setSteps(int steps) {
-		this.steps = steps;
-	}
-
-	public boolean isAlive() {
-		alive = checkAlive();
+	//return if the robot is alive
+	public boolean isAlive()
+	{
 		return alive;
 	}
-
-	public void setAlive(boolean alive) {
-		this.alive = alive;
-	}
-
-	public boolean checkAlive()
+	
+	//return the robot has the treasure
+	public boolean hasTreasure()
 	{
-		boolean ans = true;
-		if(map.valid(xposition, yposition))
+		return treasure;
+	}
+	
+	//increases steps for the robot
+	public void increaseStep(int tempY, int tempX)
+	{
+		steps++;
+		System.out.println("Step: " + steps);
+		map.accumulateSteps(tempY, tempX);
+	}
+	
+	//checks to see if the robot is on the treasure square
+	public void pickUpTreasure()
+	{
+		if(treasure == false)
 		{
-			if(map.checkAgent(xposition, yposition))
-				ans = false;
-		}
+			if(map.hasStepTreasure(yposition, xposition))
+			{
+				treasure = true;
+				System.out.println("Picked up Treasure\n");
+			}	
+		}		
+	}
+	
+	//checks to see if the robot is on the entry square
+	public boolean atEntry()
+	{
+		boolean ans = false;
+		if(map.steppingOnEntry(yposition, xposition))
+			ans = true;
 		return ans;
+	}
+	
+	//returns the number of steps
+	public int getSteps() {
+		return steps;
 	}
 	
 }
