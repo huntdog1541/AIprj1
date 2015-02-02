@@ -1,267 +1,202 @@
 import java.util.Random;
-
 import javax.swing.JPanel;
 
 
 public class Map {
 	
-	int xboundary;
-	int yboundary;
-	int numObstacle;
-	int numTreasure;
-	int numAgents;
-	int entryX;
-	int entryY;
-	Block[][] arry;
-	Random rand;
+	int xboundary; 			//defines the x-boundary
+	int yboundary;			//defines the y-boundary
+	int numObstacle;		//the number of obstacles on the board
+	int numTreasure;		//the number of treasures on the board
+	int numAgents;			//the number of agents on the board
+	int entryX;				//the x-location of the entry block
+	int entryY;				//the y-location of the entry block
+	Block[][] arry;			//the array that holds each individual square
+	Random rand;			//Random to get random numbers
 	
 	public Map()
 	{
-		xboundary = 16;
-		yboundary = 16;
-		numObstacle = (int)Math.floor((16 * 16) * .20);
-		numTreasure = 1;
-		numAgents = (int)Math.floor((16 * 16) * .10);
-		arry = new Block[16][16];
-		initArray();
-		System.out.println("Created array 16x16");
-		System.out.println("The obstacles is " + numObstacle + " numAgents "+ numAgents);
+		xboundary = 5;
+		yboundary = 5;
+		numObstacle = (int)Math.floor((xboundary * xboundary) * .20);
+ 		numTreasure = 1;
+		numAgents   = (int)Math.floor((xboundary * xboundary) * .10);
+		entryY 		= 0;
+		entryX		= 0;
+		arry = new Block[5][5];
 		rand = new Random();
-		placeTreasure();
-		placeObstacles();
-		placeAgents();
-		pickEntry();
+		this.initArray();
+		this.setEntry();
+		this.setMapObstacles();
+		this.setMapAgent();
+		this.setMapTreasure();
 	}
 	
-	public Map(int x, int y)
+	public Map(int boundary, double obsPer, double agPer)
 	{
-		xboundary = x;
-		yboundary = y;
-		numObstacle = (int)Math.floor((x * y) * .20);
-		numTreasure = 1;
-		numAgents = (int)Math.floor((x * y) * .10);
-		arry = new Block[x][y];
-		initArray();
-		System.out.println("The obstacles is " + numObstacle + " numAgents "+ numAgents);
+		xboundary = boundary;
+		yboundary = boundary;
+		numObstacle = (int)Math.floor((boundary * boundary) * obsPer);
+ 		numTreasure = 1;
+		numAgents   = (int)Math.floor((boundary * boundary) * agPer);
+		entryY		= 0;
+		entryX		= 0;
+		arry = new Block[boundary][boundary];
 		rand = new Random();
-		placeTreasure();
-		placeObstacles();
-		placeAgents();
-		pickEntry();
+		this.initArray();
+		this.setEntry();
+		this.setMapObstacles();
+		this.setMapAgent();
+		this.setMapTreasure();;
 	}
 	
-	public void pickEntry()
-	{
-		boolean ans = false;
-		int xpost = 0, ypost = 0, bord = rand.nextInt(4);
-		System.out.println("bord: " + bord);
-		while(ans == false)
-		{
-			if(bord == 0)
-				ypost = rand.nextInt(yboundary);
-			else if(bord == 1)
-				xpost = rand.nextInt(xboundary);
-			else if(bord == 2)
-			{
-				xpost = xboundary - 1;
-				ypost = rand.nextInt(yboundary);
-			}
-			else if(bord == 3)
-			{
-				ypost = yboundary - 1;
-				xpost = rand.nextInt(xboundary);
-			}
-			ans = notEntry(xpost, ypost);
-		}
-		System.out.println("X post: " + xpost + " Y post: " + ypost);
-		arry[xpost][ypost].setEntry(true);
-	}
-	
-	public boolean notEntry(int xpost, int ypost)
-	{
-		boolean ans = true;
-		if((arry[xpost][ypost]).isAgent())
-			ans = false;
-		else if((arry[xpost][ypost]).isObstacle())
-			ans = false;
-		else if((arry[xpost][ypost]).isTreasure())
-			ans = false;
-		
-		return ans;
-	}
-	
+	//initializes the array
 	public void initArray()
 	{
 		int i, j;
-		for(i = 0; i < xboundary; i++)
+		for(i = 0; i < yboundary; i++)
 		{
-			for(j = 0; j < yboundary; j++)
+			for(j = 0; j < xboundary; j++)
 			{
-				arry[i][j] = new Block();
+				arry[i][j] = new Block(i, j);
 			}
 		}
 	}
 	
-	public void placeObstacles()
+	//sets the entry location
+	public void setEntry()
 	{
-		int i, xpost = 0, ypost = 0;
-		boolean placed = false;
-		for(i = 0; i < numObstacle; i++)
-		{
-			do
-			{
-				xpost = rand.nextInt(xboundary);
-				ypost = rand.nextInt(yboundary);
-				if((arry[xpost][ypost].isAgent()) == true)
-					placed = false;
-				if((arry[xpost][ypost].isTreasure()) == true)
-					placed = false;
-				if((arry[xpost][ypost].isObstacle()) == false)
-					placed = true;
-			}while(placed == false);
-		}
-		arry[xpost][ypost].setObstacle(true);
+		arry[entryY][entryX].setEntry(true);
 	}
 	
-	public void placeAgents()
-	{
-		int i, xpost = 0, ypost = 0;
-		boolean placed = false;
-		for(i = 0; i < numAgents; i++)
-		{
-			do
-			{
-				xpost = rand.nextInt(xboundary);
-				ypost = rand.nextInt(yboundary);
-				if((arry[xpost][ypost].isObstacle()) == true)
-					placed = false;
-				if((arry[xpost][ypost].isTreasure()) == true)
-					placed = false;
-				if((arry[xpost][ypost].isAgent()) == false)
-					placed = true;
-			}while(placed == false);
-		}
-		arry[xpost][ypost].setAgent(true);
-	}
-	
-	public void placeTreasure()
-	{
-		boolean placed = false;
-		int xpost = 0, ypost = 0;
-		do
-		{
-			xpost = rand.nextInt(xboundary);
-			ypost = rand.nextInt(yboundary);
-			if((arry[xpost][ypost].isObstacle()) == true)
-				placed = false;
-			if((arry[xpost][ypost].isAgent()) == false)
-				placed = true;
-			if((arry[xpost][ypost].isEntry()) == false)
-				placed = true;
-		}while(placed == false);
-		arry[xpost][ypost].setTreasure(true);
-	}
-	
-	public int getXboundary()
+	//defines the boundary
+	public int getboundary()
 	{
 		return xboundary;
 	}
-	
-	public int getYboundary()
-	{
-		return yboundary;
+
+	//gets the JPanel from the block
+	public JPanel getPaneling(int i, int j) {
+		return arry[i][j].getPane();
 	}
 	
-	public boolean onObstacle(int xpost, int ypost)
+	//looks for an empty square to place an obstacle on the board
+	private void setMapObstacles()
 	{
 		boolean ans = false;
-		if((arry[xpost][ypost]).isObstacle())
-			ans = true;
-		return ans;
-	}
-	
-	public boolean onAgen(int xpost, int ypost)
-	{
-		boolean ans = false;
-		if((arry[xpost][ypost]).isAgent())
-			ans = true;
-		return ans;
-	}
-	
-	public boolean onTreasure(int xpost, int ypost)
-	{
-		boolean ans = false;
-		if((arry[xpost][ypost]).isTreasure())
-			ans = true;
-		return ans;
-	}
-	
-	public boolean onEntry(int xpost, int ypost)
-	{
-		boolean ans = false;
-		if((arry[xpost][ypost]).isEntry())
-			ans = true;
-		return ans;
-	}
-	
-	public boolean checkObstacle(int xpost, int ypost)
-	{
-		boolean ans = false;
-		if(valid(xpost, ypost))
+		int i, tempX = 0, tempY = 0;
+		for(i = 0; i < numObstacle; i++)
 		{
-			if((arry[xpost][ypost]).isObstacle())
+			while(ans == false)
+			{
+				tempY = rand.nextInt(yboundary);
+				tempX = rand.nextInt(xboundary);
+				if(arry[tempY][tempX].isEmpty())
+					ans = true;
+			}
+			arry[tempY][tempX].setObstacle(true);
+			System.out.println("Set Obstacle at " + tempX + " and " + tempY);
+			//arry[tempX][tempY].printBlockInfo();
+			ans = false;
+		}
+			
+	}
+	
+	//looks for an empty location to place the treasure
+	private void setMapTreasure()
+	{
+		boolean ans = false;
+		int tempY = 0, tempX = 0;
+		while(ans == false)
+		{
+			tempY = rand.nextInt(yboundary);
+			tempX = rand.nextInt(xboundary);
+			if(arry[tempY][tempX].isEmpty())
 				ans = true;
 		}
-		return ans;
+		arry[tempY][tempX].setTreasure(true);
+		System.out.println("Set Treasure at " + tempY + " and " + tempX);
+		//arry[tempX][tempY].printBlockInfo();
+		
 	}
 	
-	public boolean checkAgent(int xpost, int ypost)
+	//looks for an empty spot on the board to place an agent
+	private void setMapAgent()
 	{
 		boolean ans = false;
-		if(valid(xpost, ypost))
-			
-		if((arry[xpost][ypost]).isAgent())
-			ans = true;
-		return ans;
+		int i, tempY = 0, tempX = 0;
+		for(i = 0; i < numAgents; i++)
+		{
+			while(ans == false)
+			{
+				tempY = rand.nextInt(yboundary);
+				tempX = rand.nextInt(xboundary);
+				if(arry[tempY][tempX].isEmpty())
+					ans = true;
+			}
+			arry[tempY][tempX].setAgent(true);
+			System.out.println("Set Agent at " + tempX + " and " + tempY);
+			//arry[tempX][tempY].printBlockInfo();
+			ans = false;
+		}
 	}
 	
-	public boolean checkTreasure(int xpost, int ypost)
+	private void setMapEntry()
 	{
-		boolean ans =false;
-		if((arry[xpost][ypost]).isTreasure)
-			ans = true;
-		return ans;
+		
 	}
 	
-	public boolean checkEntry(int xpost, int ypost)
-	{
-		boolean ans = false;
-		if((arry[xpost][ypost]).isEntry())
-			ans = true;
-		return ans;
-	}
-	
-	public JPanel getPaneling(int xpst, int ypst)
-	{
-		JPanel jp = (arry[xpst][ypst]).getPane();
-		return jp;
-	}
-	
-	public boolean valid(int xpost, int ypost)
-	{
-		boolean ans = false;
-		if((xpost > xboundary) && (xpost < 0))
-			ans = true;
-		if((ypost > yboundary) && (ypost < 0))
-			ans = true;
-		return ans;
-	}
-	
-	public boolean validStep(int xpost, int ypost)
+	//only checks to see if the move is in the array
+	public boolean isValidMove(int nextY, int nextX)
 	{
 		boolean ans = true;
-		if((arry[xpost][ypost]).isObstacle() == true)
+		if((nextY < 0) || (nextY > (yboundary-1)))
 			ans = false;
+		if((nextX < 0) || (nextX > (xboundary-1)))
+			ans = false;
+		return ans;
+	}
+	
+	//checks to see if the block that it wants to move to is an obstacle block, which goes back to its original location
+	public boolean isMoveBlocked(int nextY ,int nextX)
+	{
+		boolean ans = false;
+		if((arry[nextY][nextX].isObstacle))
+			ans = true;
+		return ans;
+	}
+	
+	//checks to see if the robot is on the Agent square
+	public boolean isStandingOnAgent(int tempY, int tempX)
+	{
+		boolean ans = false;
+		if((arry[tempY][tempX].isAgent))
+			ans = true;
+		return ans;
+	}
+	
+	//checks to see if the robot is on the Treasure square
+	public boolean hasStepTreasure(int tempY, int tempX)
+	{
+		boolean ans = false;
+		if((arry[tempY][tempX].isTreasure()))
+			ans = true;
+		return ans;
+	}
+	
+	//adds one to the number of steps in the program
+	public void accumulateSteps(int tempY, int tempX)
+	{
+		int step = arry[tempY][tempX].getTrans();
+		arry[tempY][tempX].setTrans(++step);
+	}
+	
+	//checks to see if the robot is on the Entry square
+	public boolean steppingOnEntry(int tempY, int tempX)
+	{
+		boolean ans = false;
+		if(arry[tempY][tempX].isEntry())
+			ans = true;
 		return ans;
 	}
 }
