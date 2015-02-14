@@ -26,7 +26,7 @@ public class Map {
 		arry = new Block[5][5];
 		rand = new Random();
 		this.initArray();
-		this.setEntry();
+		this.setMapEntry();
 		this.setMapObstacles();
 		this.setMapAgent();
 		this.setMapTreasure();
@@ -44,7 +44,7 @@ public class Map {
 		arry = new Block[boundary][boundary];
 		rand = new Random();
 		this.initArray();
-		this.setEntry();
+		this.setMapEntry();
 		this.setMapObstacles();
 		this.setMapAgent();
 		this.setMapTreasure();;
@@ -143,7 +143,31 @@ public class Map {
 	
 	private void setMapEntry()
 	{
-		
+		int ans1 = 0, ans2 = 0;
+		ans1 = rand.nextInt(2);
+		ans2 = rand.nextInt(2);
+		if(ans1 == 0)
+		{
+			if(ans2 == 0)
+				entryX = rand.nextInt(xboundary);
+			else
+				entryY = rand.nextInt(yboundary);
+		}
+		else
+		{
+			if(ans2 == 0)
+			{
+				entryX = rand.nextInt(xboundary);
+				entryY = yboundary-1;
+			}
+			else
+			{
+				entryX = xboundary-1;
+				entryY = rand.nextInt(yboundary);
+			}
+		}
+		System.out.println("Entry Y is " + entryY + " entryx is "+ entryX);
+		setEntry();
 	}
 	
 	//only checks to see if the move is in the array
@@ -199,4 +223,22 @@ public class Map {
 			ans = true;
 		return ans;
 	}
+
+	public int getEntryX() {
+		return entryX;
+	}
+
+	public void setEntryX(int entryX) {
+		this.entryX = entryX;
+	}
+
+	public int getEntryY() {
+		return entryY;
+	}
+
+	public void setEntryY(int entryY) {
+		this.entryY = entryY;
+	}
+	
+	
 }

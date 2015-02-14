@@ -6,8 +6,6 @@ public class BlindWalk {
 	
 	private int xposition;
 	private int yposition;
-	private int xboundary;
-	private int yboundary;
 	private int direction;
 	Robot robby;
 	Map map;
@@ -17,10 +15,10 @@ public class BlindWalk {
 	{
 		robby = rby;
 		map = mps;
-		xposition = robby.getXposition();
-		yposition = robby.getYposition();
-		xboundary = mps.getboundary();
-		yboundary = mps.getboundary();
+		xposition = map.getEntryX();
+		robby.setXposition(xposition);
+		yposition = map.getEntryY();
+		robby.setYposition(yposition);
 		direction = 0;
 		rand = new Random();
 		move();

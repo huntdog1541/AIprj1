@@ -33,6 +33,7 @@ public class Robot {
 		Map mp = new Map(boundary, obsPer, agPer);
 		Robot robby = new Robot(mp);
 		robby.setWalking();
+		@SuppressWarnings("unused")
 		Graphs gph = new Graphs(mp);
 		in.close();
 	}
