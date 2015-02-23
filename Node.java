@@ -3,11 +3,29 @@ public class Node {
 
 	private int x;
 	private int y;
+	private boolean treasure;
+	private boolean agent;
+	private boolean obstacle;
+	private boolean entry;
 	
 	public Node(int numX, int numY)
 	{
 		x = numX;
 		y = numY;
+		treasure = false;
+		agent = false;
+		obstacle = false;
+		entry = false;
+	}
+	
+	public Node(int numX, int numY, Map map)
+	{
+		x = numX;
+		y = numY;
+		treasure = map.hasStepTreasure(x, y);
+		agent = map.isStandingOnAgent(x, y);
+		obstacle = map.isMoveBlocked(x, y);
+		entry = map.steppingOnEntry(x, y);
 	}
 
 	public int getX() {
@@ -25,4 +43,37 @@ public class Node {
 	public void setY(int y) {
 		this.y = y;
 	}
+
+	public boolean isTreasure() {
+		return treasure;
+	}
+
+	public void setTreasure(boolean treasure) {
+		this.treasure = treasure;
+	}
+
+	public boolean isAgent() {
+		return agent;
+	}
+
+	public void setAgent(boolean agent) {
+		this.agent = agent;
+	}
+
+	public boolean isObstacle() {
+		return obstacle;
+	}
+
+	public void setObstacle(boolean obstacle) {
+		this.obstacle = obstacle;
+	}
+
+	public boolean isEntry() {
+		return entry;
+	}
+
+	public void setEntry(boolean entry) {
+		this.entry = entry;
+	}
+	
 }
