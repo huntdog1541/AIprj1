@@ -20,17 +20,21 @@ public class Results {
 		totalRuns = 1;
 		list = new ArrayList<Stats>();
 	}
-	
-	public Results(int numOfRuns)
-	{
-		st = new Stats(numOfRuns);
-		currentRun = 1;
-		percentWin = 0.0;
-		percentLose = 0.0;
-		totalRuns = numOfRuns;
-		list = new ArrayList<Stats>();
-	}
 
+//	public Results(int numOfRuns)
+//	{
+//		st = new Stats(numOfRuns);
+//		currentRun = 1;
+//		percentWin = 0.0;
+//		percentLose = 0.0;
+//		totalRuns = numOfRuns;
+//		list = new ArrayList<Stats>();
+//	}
+
+    public void updateStats()
+    {
+
+    }
 
 	public Stats getSt() {
 		return st;

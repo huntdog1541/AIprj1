@@ -47,8 +47,8 @@ public class Map {
 		this.setMapEntry();
 		this.setMapObstacles();
 		this.setMapAgent();
-		this.setMapTreasure();;
-	}
+		this.setMapTreasure();
+    }
 	
 	//initializes the array
 	public void initArray()

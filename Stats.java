@@ -14,13 +14,24 @@ public class Stats {
 		totalSteps = 0;
 	}
 	
-	public Stats(int run)
+	public Stats(boolean suc, boolean fal, int stp)
 	{
 		runs = 1;
-		success = 0;
-		fails = 0;
-		totalSteps = run;
+        if(suc)
+            success = 1;
+        else
+		    success = 0;
+        if(fal)
+		    fails = 1;
+        else
+            fails = 0;
+		totalSteps = stp;
 	}
+
+    public void updateStat(boolean suc, boolean fal, int stp)
+    {
+        totalSteps = stp;
+    }
 
 	public int getRuns() {
 		return runs;
