@@ -214,6 +214,12 @@ public class Map {
 		int step = arry[tempY][tempX].getTrans();
 		arry[tempY][tempX].setTrans(++step);
 	}
+
+    public void decreaseSteps(int tempX, int tempY)
+    {
+        int stp = arry[tempY][tempX].getTrans();
+        arry[tempY][tempX].setTrans(stp--);
+    }
 	
 	//checks to see if the robot is on the Entry square
 	public boolean steppingOnEntry(int tempY, int tempX)

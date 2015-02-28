@@ -120,5 +120,10 @@ public class Robot {
 	public int getSteps() {
 		return steps;
 	}
-	
+
+    public void decreaseStep(int x, int y)
+    {
+        steps--;
+        map.decreaseSteps(x, y);
+    }
 }

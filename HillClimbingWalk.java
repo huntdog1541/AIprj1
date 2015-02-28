@@ -44,28 +44,31 @@ public class HillClimbingWalk {
     {
         int tempIterator1 = 0, tempIterator2 = 0;
         int oldX, oldY, nwX, nwY;
+        if((store.size() == 0) || (list.size() == 0))
+            return;
         Node outerNode = store.get(tempIterator1);
         Node innerNode;
+        Node temp;
         boolean exit = false;
-        while((outerNode != null) || (tempIterator2 < store.size()) || (exit == false))
+        while((outerNode != null) && (tempIterator2 < store.size()))
         {
             oldX = outerNode.getX();
             oldY = outerNode.getY();
             tempIterator2 = 0;
             innerNode = list.get(tempIterator2);
-            while((innerNode != null) || (tempIterator2 < list.size()) || (exit == false))
+            while((innerNode != null) && (tempIterator2 < list.size()))
             {
-                nwX = innerNode.getX();
-                nwY = innerNode.getY();
-                if((oldX == nwX) && (oldY == nwY)) {
-                    list.remove(tempIterator2);
-                    exit = true;
+                if((outerNode.isMatch(innerNode.getX(), innerNode.getY())) && (tempIterator2 <= list.size())) {
+                    temp = list.remove(tempIterator2);
+                    robby.decreaseStep(temp.getX(), temp.getY());
                 }
                 tempIterator2++;
-                innerNode = list.get(tempIterator2);
+                if(tempIterator2 < list.size())
+                    innerNode = list.get(tempIterator2);
             }
             tempIterator1++;
-            outerNode = store.get(tempIterator1);
+            if(tempIterator1 < store.size())
+                outerNode = store.get(tempIterator1);
         }
     }
 }
