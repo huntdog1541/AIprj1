@@ -27,6 +27,7 @@ public class DepthWalk {
         foundTreasure = false;
         hitWall = false;
         foundAgent = false;
+        this.walking();
 	}
 
 	public enum direction
@@ -44,7 +45,22 @@ public class DepthWalk {
 	
 	public void walking()
 	{
-		
+		Node temp = list.get(0);
+        while(!temp.isTreasure())
+        {
+            addNext();
+            list.remove(0);
+            store.add(temp);
+            temp = list.get(0);
+        }
+        /*
+        while(!temp.isEntry())
+        {
+            addNext();
+            list.remove(0);
+            store.add(temp);
+            temp = list.get(0);
+        }*/
 	}
 	
 	public void addNext()
@@ -52,18 +68,18 @@ public class DepthWalk {
         int tempIterator = currentIterator, nwX, nwY, i;
         Node temp = list.get(currentIterator);
         //Add different Nodes
-        Node node1 = new Node(getNextX(temp, direction.WEST), getNextY(temp, direction.WEST));
-        if(map.isValidMove(node1.getX(), node1.getY()))
-            list.add(node1);
-        Node node2 = new Node(getNextX(temp, direction.EAST), getNextY(temp, direction.EAST));
-        if(map.isValidMove(node2.getX(), node2.getY()))
-            list.add(node2);
-        Node node3 = new Node(getNextX(temp, direction.NORTH), getNextY(temp, direction.NORTH));
-        if(map.isValidMove(node3.getX(), node3.getY()))
-            list.add(node3);
-        Node node4 = new Node(getNextX(temp, direction.SOUTH), getNextY(temp, direction.SOUTH));
-        if(map.isValidMove(node4.getX(), node4.getY()))
-            list.add(node4);
+        Node node1 = new Node(getNextX(temp, direction.WEST), getNextY(temp, direction.WEST), map);
+        if(okayMove(node1))
+           possibleAdd(node1);
+        Node node2 = new Node(getNextX(temp, direction.EAST), getNextY(temp, direction.EAST), map);
+        if(okayMove(node2))
+            possibleAdd(node2);
+        Node node3 = new Node(getNextX(temp, direction.NORTH), getNextY(temp, direction.NORTH), map);
+        if(okayMove(node3))
+            possibleAdd(node3);
+        Node node4 = new Node(getNextX(temp, direction.SOUTH), getNextY(temp, direction.SOUTH), map);
+        if(okayMove(node4))
+            possibleAdd(node4);
 
 
         checkAllNodes();
@@ -74,8 +90,19 @@ public class DepthWalk {
         boolean ans = true;
         if(!map.isValidMove(temp.getX(), temp.getY()))
             ans = false;
-        //if()
         return ans;
+    }
+
+    public void possibleAdd(Node temp)
+    {
+        if(map.isMoveBlocked(temp.getX(), temp.getY()))
+            robby.increaseStep(temp.getX(), temp.getY());
+        if(map.isStandingOnAgent(temp.getY(), temp.getY()))
+            robby.checkAlive();
+        if(map.hasStepTreasure(temp.getX(), temp.getY()))
+            robby.hasTreasure();
+        if(map.steppingOnEntry(temp.getX(), temp.getY()))
+            robby.atEntry();
     }
 
 	//gets the next X value for the next square

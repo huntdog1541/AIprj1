@@ -22,10 +22,13 @@ public class Node {
 	{
 		x = numX;
 		y = numY;
-		treasure = map.hasStepTreasure(x, y);
-		agent = map.isStandingOnAgent(x, y);
-		obstacle = map.isMoveBlocked(x, y);
-		entry = map.steppingOnEntry(x, y);
+        if(map.isValidMove(x, y))
+        {
+            treasure = map.hasStepTreasure(x, y);
+            agent = map.isStandingOnAgent(x, y);
+            obstacle = map.isMoveBlocked(x, y);
+            entry = map.steppingOnEntry(x, y);
+        }
 	}
 
     public boolean isMatch(int OldX, int OldY){
