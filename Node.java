@@ -7,6 +7,7 @@ public class Node {
 	private boolean agent;
 	private boolean obstacle;
 	private boolean entry;
+    private double eval;
 	
 	public Node(int numX, int numY)
 	{
@@ -16,6 +17,7 @@ public class Node {
 		agent = false;
 		obstacle = false;
 		entry = false;
+        eval = 0;
 	}
 	
 	public Node(int numX, int numY, Map map)
@@ -29,6 +31,7 @@ public class Node {
             obstacle = map.isMoveBlocked(x, y);
             entry = map.steppingOnEntry(x, y);
         }
+        evaluateDistance(map);
 	}
 
     public boolean isMatch(int OldX, int OldY){
@@ -85,5 +88,14 @@ public class Node {
 	public void setEntry(boolean entry) {
 		this.entry = entry;
 	}
+
+    public void evaluateDistance(Map map)
+    {
+        int treX, treY;
+        treX = map.getTreasureX();
+        treY = map.getTreasureY();
+        eval = Math.sqrt(Math.pow((x-treX), 2) + Math.pow((y-treY), 2));
+        System.out.println("The eval for Y: " + y + " X: " + x + " eval: " + eval);
+    }
 	
 }

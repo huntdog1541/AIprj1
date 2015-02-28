@@ -32,7 +32,167 @@ public class DepthWalk {
 
     public void walking()
     {
+        Node temp = list.get(0);
+        Node temp2;
+        boolean running = true;
+        while(searchingTreasure(temp, running))
+        {
+            System.out.println("At Y: " + temp.getY() + " and X: " + temp.getX());
+            addNext();
+            temp2 = list.remove(0);
+            store.add(temp2);
+            if(list.size() != 0)
+                temp = list.get(0);
+            else {
+                System.out.println("Ran out of space in list");
+                running = false;
+            }
+        }
+        if(robby.getSteps() == 10000)
+            System.out.println("out of steps");
+        if(temp.isTreasure())
+            System.out.println("has treasure");
+        System.out.println("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
+        /*
+        while(!temp.isEntry())
+        {
+            addNext();
+            list.remove(0);
+            store.add(temp);
+            temp = list.get(0);
+        }*/
+    }
 
+    public boolean searchingTreasure(Node temp, boolean running)
+    {
+        boolean ans = true;
+        if(running == false)
+            ans = false;
+        else if(robby.getSteps() == 10000)
+            ans = false;
+        else if(temp.isTreasure())
+            ans = false;
+        return ans;
+    }
+
+    public void addNext()
+    {
+        int tempIterator = currentIterator, nwX, nwY, i;
+        Node temp = list.get(currentIterator);
+        direction dt = direction.WEST;
+        //Add different Nodes
+       for(i = 0; i < 4; i++)
+       {
+           nwX = getNextX(temp, dt);
+           nwY = getNextY(temp, dt);
+           if((nwX != temp.getX()) || (nwY != temp.getY()))
+           {
+               Node temp2 = new Node(nwX, nwY, map);
+               if(!checkAdded(temp2))
+                    list.add(temp2);
+           }
+           dt = getNextDirect(dt);
+       }
+       //checkAllNodes();
+    }
+
+    public direction getNextDirect(direction dirt)
+    {
+        direction dt2 = direction.NORTH;
+        switch(dirt)
+        {
+            case NORTH: dt2 = direction.SOUTH; break;
+            case SOUTH: dt2 = direction.WEST; break;
+            case EAST: dt2 = direction.NORTH; break;
+            case WEST: dt2 = direction.EAST; break;
+        }
+        return dt2;
+    }
+
+    public boolean okayMove(Node temp)
+    {
+        boolean ans = true;
+        if(!map.isValidMove(temp.getX(), temp.getY()))
+            ans = false;
+        return ans;
+    }
+
+    public void possibleAdd(Node temp)
+    {
+        if(map.isMoveBlocked(temp.getX(), temp.getY()))
+        {
+            //robby.increaseStep(temp.getX(), temp.getY());
+        }
+        else
+        {
+            //robby.increaseStep(temp.getX(), temp.getY());
+            list.add(temp);
+        }
+
+    }
+
+    public boolean checkAdded(Node temp)
+    {
+        boolean ans = false;
+        int i = 0;
+        Node temp2;
+        if(store.size() > 0)
+        {
+            while((i < store.size()) && (ans == true))
+            {
+                temp2 = store.get(i);
+                if(temp.isMatch(temp2.getX(), temp2.getY()))
+                    ans = true;
+                i++;
+            }
+        }
+
+        i = 0;
+        if(list.size() > 0)
+        {
+            while ((i < list.size()) && (ans == true))
+            {
+                temp2 = list.get(i);
+                if (temp.isMatch(temp2.getX(), temp2.getY()))
+                    ans = true;
+                i++;
+            }
+        }
+        return ans;
+    }
+
+    //gets the next X value for the next square
+    public int getNextX(Node node, direction dirt)
+    {
+        int x = node.getX();
+        switch(dirt)
+        {
+            case NORTH: x = x - 1; break;
+            case SOUTH: x = x + 1; break;
+            case EAST: break;
+            case WEST: break;
+        }
+        if(map.isValidMove(x, node.getY()))
+            return x;
+        else
+            return node.getX();
+    }
+
+    //gets the next Y value for the next square
+    public int getNextY(Node node, direction dirt)
+    {
+        int y = node.getY();
+        switch(dirt)
+        {
+            case NORTH: break;
+            case SOUTH: break;
+            case EAST: y = y + 1; break;
+            case WEST: y = y - 1; break;
+        }
+        if(map.isValidMove(node.getX(), y))
+            return y;
+        else
+            return node.getY();
     }
 
     public enum direction
@@ -45,6 +205,7 @@ public class DepthWalk {
         xpost = map.getEntryX();
         ypost = map.getEntryY();
         currentNode = new Node(xpost, ypost);
+        list.add(currentNode);
         currentIterator = 0;
     }
 

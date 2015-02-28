@@ -37,7 +37,15 @@ public class RandomRestartWalk {
         xpost = map.getEntryX();
         ypost = map.getEntryY();
         currentNode = new Node(xpost, ypost, map);
+        list.add(currentNode);
         currentIterator = 0;
+    }
+
+    public void restartHome()
+    {
+        int nwX, nwY;
+        nwX = map.getEntryX();
+        nwY = map.getEntryY();
     }
 
     public void checkAllNodes()

@@ -11,6 +11,8 @@ public class Map {
 	int numAgents;			//the number of agents on the board
 	int entryX;				//the x-location of the entry block
 	int entryY;				//the y-location of the entry block
+    int treasureX;
+    int treasureY;
 	Block[][] arry;			//the array that holds each individual square
 	Random rand;			//Random to get random numbers
 	
@@ -116,6 +118,8 @@ public class Map {
 		}
 		arry[tempY][tempX].setTreasure(true);
 		System.out.println("Set Treasure at " + tempY + " and " + tempX);
+        treasureX = tempX;
+        treasureY = tempY;
 		//arry[tempX][tempY].printBlockInfo();
 		
 	}
@@ -246,5 +250,60 @@ public class Map {
 		this.entryY = entryY;
 	}
 	
-	
+	public int getTreasureX() {return this.treasureX; }
+
+    public int getTreasureY() {return this.treasureY; }
+
+    private void resetMapEntry()
+    {
+        int ans1 = 0, ans2 = 0, entX = 0, entY = 0;
+        arry[entryY][entryX].setEntry(false);
+        boolean ans = true;
+        while(ans)
+        {
+            ans1 = rand.nextInt(2);
+            ans2 = rand.nextInt(2);
+            if(ans1 == 0)
+            {
+                if(ans2 == 0)
+                    entX = rand.nextInt(xboundary);
+                else
+                    entY = rand.nextInt(yboundary);
+            }
+            else
+            {
+                if(ans2 == 0)
+                {
+                    entX = rand.nextInt(xboundary);
+                    entY = yboundary-1;
+                }
+                else
+                {
+                    entX = xboundary-1;
+                    entY = rand.nextInt(yboundary);
+                }
+            }
+            if((entX != entryX) || (entY != entryY))
+            {
+                if(isEmpty(entX, entY))
+                    ans = false;
+            }
+        }
+        System.out.println("Entry Y is " + entryY + " entryx is "+ entryX);
+        setEntry();
+    }
+
+    public boolean isEmpty(int x, int y)
+    {
+        boolean ans = true;
+        if(arry[y][x].isAgent())
+            ans = false;
+        if(arry[y][x].isObstacle())
+            ans = false;
+        if(arry[y][x].isTreasure())
+            ans = false;
+        if(arry[y][x].isEntry())
+            ans = false;
+        return ans;
+    }
 }

@@ -27,6 +27,11 @@ public class HillClimbingWalk {
         foundAgent = false;
 	}
 
+    public void walking()
+    {
+
+    }
+
 	public enum direction
 	{
 		NORTH, SOUTH, EAST, WEST
@@ -37,6 +42,7 @@ public class HillClimbingWalk {
         xpost = map.getEntryX();
         ypost = map.getEntryY();
         currentNode = new Node(xpost, ypost, map);
+        list.add(currentNode);
         currentIterator = 0;
     }
 
