@@ -53,6 +53,7 @@ public class DepthWalk {
             store.add(temp);
             temp = list.get(0);
         }
+        
         /*
         while(!temp.isEntry())
         {
