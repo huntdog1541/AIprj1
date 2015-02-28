@@ -28,6 +28,13 @@ public class Node {
 		entry = map.steppingOnEntry(x, y);
 	}
 
+    public boolean isMatch(int OldX, int OldY){
+        boolean ans = false;
+        if((OldX == x) && (OldY == y))
+            ans = true;
+        return ans;
+    }
+
 	public int getX() {
 		return x;
 	}

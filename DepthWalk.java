@@ -51,12 +51,33 @@ public class DepthWalk {
 	{
         int tempIterator = currentIterator, nwX, nwY, i;
         Node temp = list.get(currentIterator);
-        for(i = 0; i < 4; i++)
-        {
+        //Add different Nodes
+        Node node1 = new Node(getNextX(temp, direction.WEST), getNextY(temp, direction.WEST));
+        if(map.isValidMove(node1.getX(), node1.getY()))
+            list.add(node1);
+        Node node2 = new Node(getNextX(temp, direction.EAST), getNextY(temp, direction.EAST));
+        if(map.isValidMove(node2.getX(), node2.getY()))
+            list.add(node2);
+        Node node3 = new Node(getNextX(temp, direction.NORTH), getNextY(temp, direction.NORTH));
+        if(map.isValidMove(node3.getX(), node3.getY()))
+            list.add(node3);
+        Node node4 = new Node(getNextX(temp, direction.SOUTH), getNextY(temp, direction.SOUTH));
+        if(map.isValidMove(node4.getX(), node4.getY()))
+            list.add(node4);
 
-        }
+
         checkAllNodes();
 	}
+
+    public boolean okayMove(Node temp)
+    {
+        boolean ans = true;
+        if(!map.isValidMove(temp.getX(), temp.getY()))
+            ans = false;
+        //if()
+        return ans;
+    }
+
 	//gets the next X value for the next square
 	public int getNextX(Node node, direction dirt)
 	{
@@ -100,9 +121,7 @@ public class DepthWalk {
              innerNode = list.get(tempIterator2);
              while((innerNode != null) || (tempIterator2 < list.size()) || (exit == false))
              {
-                nwX = innerNode.getX();
-                nwY = innerNode.getY();
-                if((oldX == nwX) && (oldY == nwY)) {
+                if(outerNode.isMatch(innerNode.getX(), innerNode.getY())) {
                     list.remove(tempIterator2);
                     exit = true;
                  }
