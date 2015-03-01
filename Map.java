@@ -254,7 +254,7 @@ public class Map {
 
     public int getTreasureY() {return this.treasureY; }
 
-    private void resetMapEntry()
+    public void resetMapEntry()
     {
         int ans1 = 0, ans2 = 0, entX = 0, entY = 0;
         arry[entryY][entryX].setEntry(false);
@@ -292,7 +292,44 @@ public class Map {
         System.out.println("Entry Y is " + entryY + " entryx is "+ entryX);
         setEntry();
     }
-
+    
+    public boolean EntrySpace()
+    {
+    	boolean ans = false;
+    	int tempX = 0, tempY = 0;
+    	if(!entryRunThroughY(0, 0))
+    		ans = true;
+    	if(!entryRunThroughX(0, 0))
+    		ans = true;
+    	if(!entryRunThroughY((yboundary-1), 0))
+    		ans = true;
+    	if(!entryRunThroughX(0, (xboundary-1)))
+    		ans = true;
+    	return ans;
+    }
+    
+    public boolean entryRunThroughY(int tempY, int tempX)
+    {
+    	boolean ans = false;
+    	for(; tempY < yboundary; tempY++)
+    	{
+    		if(arry[tempY][tempX].isEmpty())
+    			ans = true;
+    	}
+    	return ans;
+    }
+    
+    public boolean entryRunThroughX(int tempY, int tempX)
+    {
+    	boolean ans = false;
+    	for(; tempX < xboundary; tempX++)
+    	{
+    		if(arry[tempY][tempX].isEmpty())
+    			ans = true;
+    	}
+    	return ans;
+    }
+    
     public boolean isEmpty(int x, int y)
     {
         boolean ans = true;

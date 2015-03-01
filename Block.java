@@ -46,7 +46,7 @@ public class Block {
 	public void setBlockColor()
 	{
 		if(isObstacle())
-			clr = Color.BLACK;
+			clr = Color.GREEN;
 		else if(isTreasure())
 			clr = Color.ORANGE;
 		else if(isAgent())

@@ -91,24 +91,42 @@ public class BreadthWalk {
 
     public void addNext()
     {
-        //int tempIterator = currentIterator, nwX, nwY, i;
+        int tempIterator = currentIterator, nwX, nwY, i;
         Node temp = list.get(currentIterator);
+        direction dt = direction.WEST;
         //Add different Nodes
-        Node node1 = new Node(getNextX(temp, direction.WEST), getNextY(temp, direction.WEST), map);
-        if(okayMove(node1))
-            possibleAdd(node1);
-        Node node2 = new Node(getNextX(temp, direction.EAST), getNextY(temp, direction.EAST), map);
-        if(okayMove(node2))
-            possibleAdd(node2);
-        Node node3 = new Node(getNextX(temp, direction.NORTH), getNextY(temp, direction.NORTH), map);
-        if(okayMove(node3))
-            possibleAdd(node3);
-        Node node4 = new Node(getNextX(temp, direction.SOUTH), getNextY(temp, direction.SOUTH), map);
-        if(okayMove(node4))
-            possibleAdd(node4);
-
-
-        checkAllNodes();
+       for(i = 0; i < 4; i++)
+       {
+           nwX = getNextX(temp, dt);
+           nwY = getNextY(temp, dt);
+           if((nwX != temp.getX()) || (nwY != temp.getY()))
+           {
+        	   if(map.isValidMove(nwY, nwX))
+        	   {
+        		   Node temp2 = new Node(nwX, nwY, map);
+                   if(!checkAdded(temp2))
+                   {
+                	   list.add(temp2);
+                	   robby.increaseStep(nwY, nwX);
+                   }  
+        	   }
+           }
+           dt = getNextDirect(dt);
+       }
+       //checkAllNodes();
+    }
+    
+    public direction getNextDirect(direction dirt)
+    {
+        direction dt2 = direction.NORTH;
+        switch(dirt)
+        {
+            case NORTH: dt2 = direction.SOUTH; break;
+            case SOUTH: dt2 = direction.WEST; break;
+            case EAST: dt2 = direction.NORTH; break;
+            case WEST: dt2 = direction.EAST; break;
+        }
+        return dt2;
     }
 
     public boolean okayMove(Node temp)
@@ -131,6 +149,36 @@ public class BreadthWalk {
             list.add(temp);
         }
 
+    }
+    
+    public boolean checkAdded(Node temp)
+    {
+        boolean ans = false;
+        int i = 0;
+        Node temp2;
+        if(store.size() > 0)
+        {
+            while((i < store.size()) && (ans == true))
+            {
+                temp2 = store.get(i);
+                if(temp.isMatch(temp2.getX(), temp2.getY()))
+                    ans = true;
+                i++;
+            }
+        }
+
+        i = 0;
+        if(list.size() > 0)
+        {
+            while ((i < list.size()) && (ans == true))
+            {
+                temp2 = list.get(i);
+                if (temp.isMatch(temp2.getX(), temp2.getY()))
+                    ans = true;
+                i++;
+            }
+        }
+        return ans;
     }
 
     //gets the next X value for the next square

@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+
+
 public class DepthWalk {
 
     private Robot robby;
@@ -87,9 +89,15 @@ public class DepthWalk {
            nwY = getNextY(temp, dt);
            if((nwX != temp.getX()) || (nwY != temp.getY()))
            {
-               Node temp2 = new Node(nwX, nwY, map);
-               if(!checkAdded(temp2))
-                    list.add(temp2);
+        	   if(map.isValidMove(nwY, nwX))
+        	   {
+        		   Node temp2 = new Node(nwX, nwY, map);
+                   if(!checkAdded(temp2))
+                   {
+                	   list.add(temp2);
+                	   robby.increaseStep(nwY, nwX);
+                   }  
+        	   }
            }
            dt = getNextDirect(dt);
        }

@@ -126,4 +126,9 @@ public class Robot {
         steps--;
         map.decreaseSteps(x, y);
     }
+    
+    public void resetSteps()
+    {
+    	steps = 0;
+    }
 }

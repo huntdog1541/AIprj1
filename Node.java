@@ -26,10 +26,10 @@ public class Node {
 		y = numY;
         if(map.isValidMove(x, y))
         {
-            treasure = map.hasStepTreasure(x, y);
-            agent = map.isStandingOnAgent(x, y);
-            obstacle = map.isMoveBlocked(x, y);
-            entry = map.steppingOnEntry(x, y);
+            treasure = map.hasStepTreasure(y, x);
+            agent = map.isStandingOnAgent(y, x);
+            obstacle = map.isMoveBlocked(y, x);
+            entry = map.steppingOnEntry(y, x);
         }
         evaluateDistance(map);
 	}
@@ -88,9 +88,22 @@ public class Node {
 	public void setEntry(boolean entry) {
 		this.entry = entry;
 	}
+	
+    public double getEval() {
+		return eval;
+	}
 
-    public void evaluateDistance(Map map)
+	public void setEval(double eval) {
+		this.eval = eval;
+	}
+
+	public void evaluateDistance(Map map)
     {
+		if(evalObstacle())
+		{
+			System.out.println("The eval for Y: " + y + " X: " + x + " eval: " + eval);
+			return;
+		}
         int treX, treY;
         treX = map.getTreasureX();
         treY = map.getTreasureY();
@@ -98,4 +111,23 @@ public class Node {
         System.out.println("The eval for Y: " + y + " X: " + x + " eval: " + eval);
     }
 	
+	public boolean evalObstacle()
+	{
+		boolean ans =false;
+		if(obstacle)
+		{
+			eval = 10000;
+			ans = true;
+		}
+		return ans;
+	}
+	
+    public boolean compareEval(Node tp)
+    {
+    	double temp = tp.getEval();
+    	boolean ans = true;
+    	if(eval > temp)
+    		ans = false;
+    	return ans;
+    }
 }

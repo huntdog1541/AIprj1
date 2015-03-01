@@ -17,9 +17,9 @@ public class Movement {
 	public void setMovement(Robot robby, Map mps)
 	{
 		//walk = new BlindWalk(robby, mps);
-		walk1 = new DepthWalk(robby, mps);
-//		walk2 = new BreadthWalk(robby, mps);
-//		walk3 = new HillClimbingWalk(robby, mps);
-//		walk4 = new RandomRestartWalk(robby, mps);
+		//walk1 = new DepthWalk(robby, mps);
+		//walk2 = new BreadthWalk(robby, mps);
+		//walk3 = new HillClimbingWalk(robby, mps);
+		walk4 = new RandomRestartWalk(robby, mps);
 	}
 }
