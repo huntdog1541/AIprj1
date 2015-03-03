@@ -15,10 +15,11 @@ public class DepthWalk {
     private boolean foundTreasure;
     private boolean hitWall;
     private boolean foundAgent;
+    private Log log;
 
 
 
-    public DepthWalk(Robot roy, Map mps) {
+    public DepthWalk(Robot roy, Map mps, Log lg) {
         robby = roy;
         map = mps;
         store = new ArrayList<Node>();
@@ -29,6 +30,8 @@ public class DepthWalk {
         foundTreasure = false;
         hitWall = false;
         foundAgent = false;
+        log = lg;
+        lg.printResponse("Depth Walk\n");
         this.walking();
     }
 

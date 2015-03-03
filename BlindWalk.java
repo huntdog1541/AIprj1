@@ -10,8 +10,9 @@ public class BlindWalk {
 	Robot robby;
 	Map map;
 	Random rand;
+    private Log log;
 	
-	public BlindWalk(Robot rby, Map mps)
+	public BlindWalk(Robot rby, Map mps, Log lg)
 	{
 		robby = rby;
 		map = mps;
@@ -21,6 +22,8 @@ public class BlindWalk {
 		robby.setYposition(yposition);
 		direction = 0;
 		rand = new Random();
+        log = lg;
+        lg.printResponse("Blind Walk");
 		move();
 	}
 	

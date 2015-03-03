@@ -13,8 +13,9 @@ public class RandomRestartWalk {
     private boolean foundTreasure;
     private boolean hitWall;
     private boolean foundAgent;
+    private Log log;
 
-	public RandomRestartWalk(Robot roy, Map mps) {
+	public RandomRestartWalk(Robot roy, Map mps, Log lg) {
 		robby = roy;
 		map = mps;
 		previousEntries = new ArrayList<Node>();
@@ -25,6 +26,8 @@ public class RandomRestartWalk {
         foundTreasure = false;
         hitWall = false;
         foundAgent = false;
+        log = lg;
+        lg.printResponse("Random Restart\n");
         this.walking();
 	}
 

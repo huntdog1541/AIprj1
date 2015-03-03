@@ -15,6 +15,8 @@ public class Map {
     int treasureY;
 	Block[][] arry;			//the array that holds each individual square
 	Random rand;			//Random to get random numbers
+    boolean setAgentsOn;
+    Log log;
 	
 	public Map()
 	{
@@ -27,6 +29,7 @@ public class Map {
 		entryX		= 0;
 		arry = new Block[5][5];
 		rand = new Random();
+        setAgentsOn = true;
 		this.initArray();
 		this.setMapEntry();
 		this.setMapObstacles();
@@ -34,7 +37,7 @@ public class Map {
 		this.setMapTreasure();
 	}
 	
-	public Map(int boundary, double obsPer, double agPer)
+	public Map(int boundary, double obsPer, double agPer, boolean agtOn, Log lg)
 	{
 		xboundary = boundary;
 		yboundary = boundary;
@@ -45,10 +48,13 @@ public class Map {
 		entryX		= 0;
 		arry = new Block[boundary][boundary];
 		rand = new Random();
+        setAgentsOn = agtOn;
+        log = lg;
 		this.initArray();
 		this.setMapEntry();
 		this.setMapObstacles();
-		this.setMapAgent();
+        if(setAgentsOn)
+		    this.setMapAgent();
 		this.setMapTreasure();
     }
 	
@@ -117,6 +123,7 @@ public class Map {
 				ans = true;
 		}
 		arry[tempY][tempX].setTreasure(true);
+
 		System.out.println("Set Treasure at " + tempY + " and " + tempX);
         treasureX = tempX;
         treasureY = tempY;

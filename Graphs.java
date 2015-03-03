@@ -13,7 +13,7 @@ public class Graphs
 		map = mps;
 		frame = new JFrame();
 		frame.setPreferredSize(new Dimension(500,500));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		GridLayout layout = new GridLayout(mps.getboundary(), mps.getboundary());
 		frame.setLayout(layout);
 		updateGraph();
@@ -25,7 +25,7 @@ public class Graphs
 	{
 		map = mps;
 		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLayout(new GridLayout(ybound, xbound));
 		updateGraph();
 		frame.pack();

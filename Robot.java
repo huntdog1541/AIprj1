@@ -10,9 +10,10 @@ public class Robot {
 	boolean treasure;		//does the robot has the treasure?
 	Map map;				//Map class that generates the map
 	Movement move;			//move class that decides how the robot moves around the map
+    private Log log;
 	
 	//constructor functions
-	public Robot(Map mps)
+	public Robot(Map mps, Log lg)
 	{
 		xposition = 0;
 		yposition = 0;
@@ -20,22 +21,14 @@ public class Robot {
 		alive = true;
 		treasure = false;
 		map = mps;
-		move = new Movement();
+        log = lg;
+		move = new Movement(log);
 	}
 
 	
-	public static void main(String[] args) {
-		System.out.print("How many rows: ");
-		Scanner in = new Scanner(System.in);
-		int boundary = in.nextInt();
-		double obsPer = .20;
-		double agPer = .10;
-		Map mp = new Map(boundary, obsPer, agPer);
-		Robot robby = new Robot(mp);
-		robby.setWalking();
-		@SuppressWarnings("unused")
-		Graphs gph = new Graphs(mp);
-		in.close();
+	public void running() {
+
+		this.setWalking();
 	}
 	
 	//setWalking() - initializes the blindWalk functions

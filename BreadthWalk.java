@@ -15,8 +15,9 @@ public class BreadthWalk {
     private boolean foundTreasure;
     private boolean hitWall;
     private boolean foundAgent;
+    private Log log;
 
-    public BreadthWalk(Robot roy, Map mps) {
+    public BreadthWalk(Robot roy, Map mps, Log lg) {
         robby = roy;
         map = mps;
         list = new ArrayList<Node>();
@@ -27,6 +28,8 @@ public class BreadthWalk {
         foundTreasure = false;
         hitWall = false;
         foundAgent = false;
+        log = lg;
+        log.printResponse("Breadth Walk\n");
         this.walking();
     }
 

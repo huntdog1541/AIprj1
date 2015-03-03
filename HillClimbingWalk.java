@@ -14,8 +14,9 @@ public class HillClimbingWalk {
     private boolean foundTreasure;
     private boolean hitWall;
     private boolean foundAgent;
+    private Log log;
 
-	public HillClimbingWalk(Robot roy, Map mps) {
+	public HillClimbingWalk(Robot roy, Map mps, Log lg) {
 		robby = roy;
 		map = mps;
         list = new ArrayList<Node>();
@@ -26,6 +27,8 @@ public class HillClimbingWalk {
         foundTreasure = false;
         hitWall = false;
         foundAgent = false;
+        log = lg;
+        log.printResponse("Hill-Climbing Walk\n");
         this.walking();
 	}
 
@@ -47,7 +50,7 @@ public class HillClimbingWalk {
             System.out.println("out of steps");
         if(currentNode != null)
         	if(currentNode.isTreasure())
-        		System.out.println("has treasure");
+        		System.out.println("Robby has treasure");
         System.out.println("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
         /*
         while(!temp.isEntry())
