@@ -34,6 +34,18 @@ public class gui extends JPanel {
         rowNumber = 0;
         colNumber = 0;
         hasAgents = false;
+        defaultObstacles = true;   //is accepting default obstacles
+        defaultAgents = true;      //is accepting default agents
+        agentsPresent = true;      //is agents present
+        allWalk = false;            //is the all walk button set
+        blindWalk = false;          //is the blind walk button set
+        depthWalk = false;          //is the depth walk button set
+        breadthWalk = false;        //is the breadth walk button set
+        hillClimbWalk = false;      //is the hill-climbing walk button set
+        randomRestartWalk = false;  //is the random restart button set
+        active = true;             //has the run button been pressed
+        rowNum = false;             //has the row number been entered
+        colNum = false;             //has the column number been entered
     }
 
     public void addComponents() {
@@ -48,7 +60,129 @@ public class gui extends JPanel {
         txtGui.addText(temp);
     }
 
-    public class gui3 extends JPanel {
+    public int getRowNumber() {
+		return rowNumber;
+	}
+
+	public void setRowNumber(int rowNumber) {
+		this.rowNumber = rowNumber;
+	}
+
+	public int getColNumber() {
+		return colNumber;
+	}
+
+	public void setColNumber(int colNumber) {
+		this.colNumber = colNumber;
+	}
+
+	public boolean isHasAgents() {
+		return hasAgents;
+	}
+
+	public void setHasAgents(boolean hasAgents) {
+		this.hasAgents = hasAgents;
+	}
+
+	public boolean isDefaultObstacles() {
+		return defaultObstacles;
+	}
+
+	public void setDefaultObstacles(boolean defaultObstacles) {
+		this.defaultObstacles = defaultObstacles;
+	}
+
+	public boolean isDefaultAgents() {
+		return defaultAgents;
+	}
+
+	public void setDefaultAgents(boolean defaultAgents) {
+		this.defaultAgents = defaultAgents;
+	}
+
+	public boolean isAgentsPresent() {
+		return agentsPresent;
+	}
+
+	public void setAgentsPresent(boolean agentsPresent) {
+		this.agentsPresent = agentsPresent;
+	}
+
+	public boolean isAllWalk() {
+		return allWalk;
+	}
+
+	public void setAllWalk(boolean allWalk) {
+		this.allWalk = allWalk;
+	}
+
+	public boolean isBlindWalk() {
+		return blindWalk;
+	}
+
+	public void setBlindWalk(boolean blindWalk) {
+		this.blindWalk = blindWalk;
+	}
+
+	public boolean isDepthWalk() {
+		return depthWalk;
+	}
+
+	public void setDepthWalk(boolean depthWalk) {
+		this.depthWalk = depthWalk;
+	}
+
+	public boolean isBreadthWalk() {
+		return breadthWalk;
+	}
+
+	public void setBreadthWalk(boolean breadthWalk) {
+		this.breadthWalk = breadthWalk;
+	}
+
+	public boolean isHillClimbWalk() {
+		return hillClimbWalk;
+	}
+
+	public void setHillClimbWalk(boolean hillClimbWalk) {
+		this.hillClimbWalk = hillClimbWalk;
+	}
+
+	public boolean isRandomRestartWalk() {
+		return randomRestartWalk;
+	}
+
+	public void setRandomRestartWalk(boolean randomRestartWalk) {
+		this.randomRestartWalk = randomRestartWalk;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public boolean isRowNum() {
+		return rowNum;
+	}
+
+	public void setRowNum(boolean rowNum) {
+		this.rowNum = rowNum;
+	}
+
+	public boolean isColNum() {
+		return colNum;
+	}
+
+	public void setColNum(boolean colNum) {
+		this.colNum = colNum;
+	}
+
+
+
+	public class gui3 extends JPanel {
         private JLabel jcomp1;
         private JLabel jcomp2;
         private JTextField rowsAns;
@@ -63,8 +197,8 @@ public class gui extends JPanel {
         private JButton jcomp12;
         private JLabel jcomp13;
         private JLabel jcomp14;
-        private JTextField jcomp15;
-        private JTextField jcomp16;
+        private JTextField numAgents;
+        private JTextField numObst;
         private JRadioButton jcomp17;
         private JRadioButton jcomp18;
         private JLabel jcomp19;
@@ -93,8 +227,8 @@ public class gui extends JPanel {
             jcomp12 = new JButton("Run");
             jcomp13 = new JLabel("Number of Obstacles:");
             jcomp14 = new JLabel("Number of Agents:");
-            jcomp15 = new JTextField(5);
-            jcomp16 = new JTextField(5);
+            numAgents = new JTextField (5);
+            numObst = new JTextField (5);
             jcomp17 = new JRadioButton("default number of Obstacles");
             jcomp18 = new JRadioButton("default number of Agents");
             jcomp19 = new JLabel("Color Key");
@@ -124,7 +258,7 @@ public class gui extends JPanel {
             jcomp12.setToolTipText("Click here to run the simulation");
             jcomp13.setToolTipText("Enter the number of obstacles");
             jcomp14.setToolTipText("Enter the number of agents");
-            jcomp16.setToolTipText("Enter the number of obstacles");
+            numObst.setToolTipText("Enter the number of obstacles");
             jcomp17.setToolTipText("Click here to accept the number of obstacles");
             jcomp18.setToolTipText("Click here to accept the default number of agents");
 
@@ -147,8 +281,8 @@ public class gui extends JPanel {
             add(jcomp12);
             add(jcomp13);
             add(jcomp14);
-            add(jcomp15);
-            add(jcomp16);
+            add (numAgents);
+            add (numObst);
             add(jcomp17);
             add(jcomp18);
             add(jcomp19);
@@ -177,8 +311,8 @@ public class gui extends JPanel {
             jcomp12.setBounds(40, 395, 100, 25);
             jcomp13.setBounds(455, 75, 131, 25);
             jcomp14.setBounds(170, 155, 110, 25);
-            jcomp15.setBounds(280, 155, 100, 25);
-            jcomp16.setBounds(580, 75, 100, 25);
+            numAgents.setBounds (280, 155, 100, 25);
+            numObst.setBounds (580, 75, 100, 25);
             jcomp17.setBounds(450, 40, 250, 25);
             jcomp18.setBounds(165, 130, 200, 25);
             jcomp19.setBounds(165, 285, 100, 25);
@@ -192,7 +326,38 @@ public class gui extends JPanel {
             obstacleColor.setBounds(525, 320, 100, 50);
         }
 
+		public String getRowsAns() {
+			return rowsAns.getText();
+		}
 
+		public void setRowsAns(String temp) {
+			this.rowsAns.setText(temp);;
+		}
+
+		public String getColumnAns() {
+			return columnAns.getText();
+		}
+
+		public void setColumnAns(String temp) {
+			this.columnAns.setText(temp);;
+		}
+
+		public String getNumAgents() {
+			return numAgents.getText();
+		}
+
+		public void setNumAgents(String temp) {
+			this.numAgents.setText(temp);;
+		}
+
+		public String getNumObst() {
+			return numObst.getText();
+		}
+
+		public void setNumObst(String temp) {
+			this.numObst.setText(temp);
+
+		}
     }
 
     public class textGui extends JPanel {
@@ -223,4 +388,6 @@ public class gui extends JPanel {
         }
 
     }
+    
+    //public class 
 }
