@@ -1,6 +1,8 @@
 /**
  * Created by David on 3/2/2015.
  */
+import java.io.File;
+import java.io.PrintWriter;
 import java.lang.*;
 
 public class Log {
@@ -9,6 +11,7 @@ public class Log {
     private String response;
     private gui display;
     private StringBuilder sb;
+    private PrintWriter output;
 
     public Log()
     {
@@ -18,6 +21,8 @@ public class Log {
     public Log(gui gi)
     {
         display = gi;
+        //output = new PrintWriter("output.txt");
+
     }
 
     public void printResponse(String msg)
@@ -45,4 +50,33 @@ public class Log {
         display.addText("\n");
     }
 
+    public void printAll(String... args)
+    {
+        sb = new StringBuilder();
+        for(String i : args)
+        {
+            sb.append(i);
+        }
+        display.addText(sb.toString());
+        display.addText("\n");
+    }
+
+    public void printIncludeString(String temp, String args[])
+    {
+        System.out.println(temp);
+        printAll(args);
+    }
+
+    public void printBoth(String... args)
+    {
+        sb = new StringBuilder();
+        for(String i: args)
+        {
+            sb.append(i);
+        }
+        String temp = sb.toString();
+        System.out.println(temp);
+        display.addText(temp);
+        display.addText("\n");
+    }
 }

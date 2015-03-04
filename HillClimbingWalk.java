@@ -37,21 +37,21 @@ public class HillClimbingWalk {
         boolean running = true;
         while(searchingTreasure(currentNode, running))
         {
-            System.out.println("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
+            log.printBoth("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
             store.add(currentNode);
             currentNode = this.getNextNode(currentNode);
             if(currentNode == null)
             {
             	running = false;
-            	System.out.println("Reached local maximum");
+            	log.printBoth("Reached local maximum");
             }
         }
         if(robby.getSteps() == 10000)
-            System.out.println("out of steps");
+            log.printResponse("out of steps");
         if(currentNode != null)
         	if(currentNode.isTreasure())
-        		System.out.println("Robby has treasure");
-        System.out.println("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
+        		log.printResponse("Robby has treasure");
+        log.printBoth("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
         /*
         while(!temp.isEntry())
         {

@@ -32,9 +32,9 @@ public class BlindWalk {
 	{
 		getTreasure();
 		if(robby.isAlive())
-			System.out.println("The number of steps to find the treasure " + robby.getSteps());
+			log.printBoth("The number of steps to find the treasure " + robby.getSteps());
 		findEntry();
-		System.out.println("The number of steps is " + robby.getSteps());
+		log.printBoth("The number of steps is " + robby.getSteps());
 	}
 	
 	//
@@ -66,7 +66,7 @@ public class BlindWalk {
 						moveWest(nextY, nextX);
 					break;
 			}
-			System.out.println("Y: " + yposition + " X: " + xposition);
+			log.printBoth("Y: " + yposition + " X: " + xposition);
 		}
 	}
 	
@@ -103,7 +103,7 @@ public class BlindWalk {
 						moveWest(nextY, nextX);
 					break;
 			}
-			System.out.println("Y: " + yposition + " X: " + xposition);
+			log.printBoth("Y: " + yposition + " X: " + xposition);
 		}
 	}
 	

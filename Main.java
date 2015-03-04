@@ -19,10 +19,11 @@ public class Main {
         gi = new gui();
         frame.getContentPane().add(gi);
         frame.pack();
+        /*
         log = new Log(gi);
         map = new Map(5, .20, .10, false, log);
         robby = new Robot(map, log);
         robby.setWalking();
-        gph = new Graphs(map);
+        gph = new Graphs(map);*/
     }
 }

@@ -18,25 +18,6 @@ public class Map {
     boolean setAgentsOn;
     Log log;
 	
-	public Map()
-	{
-		xboundary = 5;
-		yboundary = 5;
-		numObstacle = (int)Math.floor((xboundary * xboundary) * .20);
- 		numTreasure = 1;
-		numAgents   = (int)Math.floor((xboundary * xboundary) * .10);
-		entryY 		= 0;
-		entryX		= 0;
-		arry = new Block[5][5];
-		rand = new Random();
-        setAgentsOn = true;
-		this.initArray();
-		this.setMapEntry();
-		this.setMapObstacles();
-		this.setMapAgent();
-		this.setMapTreasure();
-	}
-	
 	public Map(int boundary, double obsPer, double agPer, boolean agtOn, Log lg)
 	{
 		xboundary = boundary;
@@ -103,7 +84,7 @@ public class Map {
 					ans = true;
 			}
 			arry[tempY][tempX].setObstacle(true);
-			System.out.println("Set Obstacle at " + tempX + " and " + tempY);
+			log.printBoth("Set Obstacle at " + tempX + " and " + tempY);
 			//arry[tempX][tempY].printBlockInfo();
 			ans = false;
 		}
@@ -124,7 +105,7 @@ public class Map {
 		}
 		arry[tempY][tempX].setTreasure(true);
 
-		System.out.println("Set Treasure at " + tempY + " and " + tempX);
+		log.printBoth("Set Treasure at " + tempY + " and " + tempX);
         treasureX = tempX;
         treasureY = tempY;
 		//arry[tempX][tempY].printBlockInfo();
@@ -146,7 +127,7 @@ public class Map {
 					ans = true;
 			}
 			arry[tempY][tempX].setAgent(true);
-			System.out.println("Set Agent at " + tempX + " and " + tempY);
+			log.printBoth("Set Agent at " + tempX + " and " + tempY);
 			//arry[tempX][tempY].printBlockInfo();
 			ans = false;
 		}
@@ -177,7 +158,7 @@ public class Map {
 				entryY = rand.nextInt(yboundary);
 			}
 		}
-		System.out.println("Entry Y is " + entryY + " entryx is "+ entryX);
+		log.printBoth("Entry Y is " + entryY + " entryx is "+ entryX);
 		setEntry();
 	}
 	
@@ -260,7 +241,8 @@ public class Map {
 	public int getTreasureX() {return this.treasureX; }
 
     public int getTreasureY() {return this.treasureY; }
-
+    
+    //resets the map for random restart
     public void resetMapEntry()
     {
         int ans1 = 0, ans2 = 0, entX = 0, entY = 0;
@@ -296,10 +278,11 @@ public class Map {
                     ans = false;
             }
         }
-        System.out.println("Entry Y is " + entryY + " entryx is "+ entryX);
+        log.printBoth("Entry Y is " + entryY + " entryx is "+ entryX);
         setEntry();
     }
     
+    //checks to see if there is space for a new entry position
     public boolean EntrySpace()
     {
     	boolean ans = false;
@@ -315,6 +298,7 @@ public class Map {
     	return ans;
     }
     
+    //runs through the map and checks to see if there is a new space for an entry insertion
     public boolean entryRunThroughY(int tempY, int tempX)
     {
     	boolean ans = false;
@@ -325,6 +309,7 @@ public class Map {
     	}
     	return ans;
     }
+    
     
     public boolean entryRunThroughX(int tempY, int tempX)
     {
@@ -349,5 +334,10 @@ public class Map {
         if(arry[y][x].isEntry())
             ans = false;
         return ans;
+    }
+
+    public void printInfo(String... args)
+    {
+        log.printBoth(args);
     }
 }

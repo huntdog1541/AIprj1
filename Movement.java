@@ -22,8 +22,8 @@ public class Movement {
 	//decides the movement path the robot uses
 	public void setMovement(Robot robby, Map mps)
 	{
-		//walk = new BlindWalk(robby, mps, log);
-		walk1 = new DepthWalk(robby, mps, log);
+		walk = new BlindWalk(robby, mps, log);
+		//walk1 = new DepthWalk(robby, mps, log);
 		//walk2 = new BreadthWalk(robby, mps, log);
 		//walk3 = new HillClimbingWalk(robby, mps, log);
 		//walk4 = new RandomRestartWalk(robby, mps, log);

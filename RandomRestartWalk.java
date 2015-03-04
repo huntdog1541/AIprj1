@@ -42,21 +42,21 @@ public class RandomRestartWalk {
         boolean running = true;
         while(searchingTreasure(currentNode, running))
         {
-            System.out.println("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
+            log.printBoth("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
             store.add(currentNode);
             currentNode = this.getNextNode(currentNode);
             if(currentNode == null)
             {
             	running = false;
-            	System.out.println("Reached local maximum");
+            	log.printBoth("Reached local maximum");
             }
         }
         if(robby.getSteps() >= 10000)
-            System.out.println("out of steps");
+            log.printBoth("out of steps");
         else if(currentNode != null)
         {
         	if(currentNode.isTreasure())
-        		System.out.println("has treasure");
+        		log.printBoth("has treasure");
 	
         }
     	else if(isEntrySpaceAvailable())
@@ -68,7 +68,7 @@ public class RandomRestartWalk {
     		return;		
     
         	
-        System.out.println("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
+        log.printBoth("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
         /*
         while(!temp.isEntry())
         {
@@ -199,7 +199,8 @@ public class RandomRestartWalk {
 
     public void restartHome()
     {
-    	System.out.println("Started OVer");
+    	log.printBoth("Started Over");
+    	previousEntries.add(new Node(map.getEntryX(), map.getEntryY(), map));
         map.resetMapEntry();
         while(checkPreviousEntries(map.getEntryY(), map.getEntryX()))
         	map.resetMapEntry();
@@ -212,13 +213,13 @@ public class RandomRestartWalk {
     public boolean checkPreviousEntries(int nwY, int nwX)
     {
     	int i;
-    	boolean ans = false;
+    	boolean ans = true;
     	Node temp = null;
     	for(i = 0; i < previousEntries.size(); i++)
     	{
     		temp = previousEntries.get(i);
     		if(temp.isMatch(nwX, nwY))
-    			ans = true;
+    			ans = false;
     	}
     	return ans;
     }

@@ -54,22 +54,22 @@ public class BreadthWalk {
         boolean running = true;
         while(searchingTreasure(temp, running))
         {
-            System.out.println("At Y: " + temp.getY() + " and X: " + temp.getX());
+            log.printBoth("At Y: " + temp.getY() + " and X: " + temp.getX());
             addNext();
             temp2 = list.remove(0);
             store.add(temp2);
             if(list.size() != 0)
                 temp = list.get(0);
             else {
-                System.out.println("Ran out of space in list");
+                log.printBoth("Ran out of space in list");
                 running = false;
             }
         }
         if(robby.getSteps() == 10000)
-            System.out.println("out of steps");
+            log.printBoth("out of steps");
         if(temp.isTreasure())
-            System.out.println("has treasure");
-        System.out.println("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
+            log.printBoth("has treasure");
+        log.printBoth("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
         /*
         while(!temp.isEntry())
         {

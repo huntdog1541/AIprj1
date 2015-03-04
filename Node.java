@@ -101,14 +101,14 @@ public class Node {
     {
 		if(evalObstacle())
 		{
-			System.out.println("The eval for Y: " + y + " X: " + x + " eval: " + eval);
+			map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
 			return;
 		}
         int treX, treY;
         treX = map.getTreasureX();
         treY = map.getTreasureY();
         eval = Math.sqrt(Math.pow((x-treX), 2) + Math.pow((y-treY), 2));
-        System.out.println("The eval for Y: " + y + " X: " + x + " eval: " + eval);
+        map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
     }
 	
 	public boolean evalObstacle()
