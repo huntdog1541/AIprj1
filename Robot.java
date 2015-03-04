@@ -11,9 +11,10 @@ public class Robot {
 	Map map;				//Map class that generates the map
 	Movement move;			//move class that decides how the robot moves around the map
     private Log log;
+    private gui gi;
 	
 	//constructor functions
-	public Robot(Map mps, Log lg)
+	public Robot(Map mps, Log lg, gui tp)
 	{
 		xposition = 0;
 		yposition = 0;
@@ -22,7 +23,8 @@ public class Robot {
 		treasure = false;
 		map = mps;
         log = lg;
-		move = new Movement(log);
+        gi = tp;
+		move = new Movement(log, gi);
 	}
 
 	

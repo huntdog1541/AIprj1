@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by David on 3/3/2015.
@@ -30,7 +32,7 @@ public class gui extends JPanel {
 
 
     public gui() {
-        addComponents();
+
         rowNumber = 0;
         colNumber = 0;
         hasAgents = false;
@@ -38,7 +40,7 @@ public class gui extends JPanel {
         defaultAgents = true;      //is accepting default agents
         agentsPresent = true;      //is agents present
         allWalk = false;            //is the all walk button set
-        blindWalk = false;          //is the blind walk button set
+        blindWalk = true;          //is the blind walk button set
         depthWalk = false;          //is the depth walk button set
         breadthWalk = false;        //is the breadth walk button set
         hillClimbWalk = false;      //is the hill-climbing walk button set
@@ -46,6 +48,8 @@ public class gui extends JPanel {
         active = true;             //has the run button been pressed
         rowNum = false;             //has the row number been entered
         colNum = false;             //has the column number been entered
+        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        addComponents();
     }
 
     public void addComponents() {
@@ -180,6 +184,14 @@ public class gui extends JPanel {
 		this.colNum = colNum;
 	}
 
+    public void setEnabledComponents(boolean ans){
+        if(ans)
+        {
+            active = true;
+            gi.checkActive();
+        }
+    }
+
 
 
 	public class gui3 extends JPanel {
@@ -213,6 +225,7 @@ public class gui extends JPanel {
 
         public gui3() {
             //construct components
+            this.setBorder(BorderFactory.createTitledBorder("Values"));
             jcomp1 = new JLabel("How many rows: ");
             jcomp2 = new JLabel("How many columns:");
             rowsAns = new JTextField(5);
@@ -265,6 +278,14 @@ public class gui extends JPanel {
             //adjust size and set layout
             setPreferredSize(new Dimension(784, 454));
             setLayout(null);
+
+            if(!defaultObstacles)
+                numObst.setEnabled(false);
+
+            if(!defaultAgents)
+                numAgents.setEnabled(false);
+            checkActive();
+            jcomp12.addActionListener(new RunButtonListner());
 
             //add components
             add(jcomp1);
@@ -324,6 +345,8 @@ public class gui extends JPanel {
             treasureColor.setBounds(395, 320, 100, 50);
             jcomp23.setBounds(525, 320, 100, 25);
             obstacleColor.setBounds(525, 320, 100, 50);
+
+
         }
 
 		public String getRowsAns() {
@@ -356,8 +379,62 @@ public class gui extends JPanel {
 
 		public void setNumObst(String temp) {
 			this.numObst.setText(temp);
-
 		}
+
+        public void greyRowAns(boolean val)
+        {
+            if(val)
+                this.rowsAns.setEnabled(false);
+        }
+
+        public void checkActive()
+        {
+            System.out.println("check active: " + active);
+            if(!active)
+            {
+                System.out.println("Active is " + active);
+                rowsAns.setEnabled(false);
+                columnAns.setEnabled(false);
+                jcomp5.setEnabled(false);
+                jcomp6.setEnabled(false);
+                jcomp7.setEnabled(false);
+                jcomp8.setEnabled(false);
+                jcomp9.setEnabled(false);
+                jcomp10.setEnabled(false);
+                jcomp11.setEnabled(false);
+                jcomp12.setEnabled(false);
+                numAgents.setEnabled(false);
+                numObst.setEnabled(false);
+                jcomp17.setEnabled(false);
+                jcomp18.setEnabled(false);
+                jcomp14.setEnabled(false);
+                jcomp13.setEnabled(false);
+                jcomp1.setEnabled(false);
+                jcomp2.setEnabled(false);
+            }
+            else
+            {
+                    System.out.println("Active is " + active);
+                    rowsAns.setEnabled(true);
+                    columnAns.setEnabled(true);
+                    jcomp5.setEnabled(true);
+                    jcomp6.setEnabled(true);
+                    jcomp7.setEnabled(true);
+                    jcomp8.setEnabled(true);
+                    jcomp9.setEnabled(true);
+                    jcomp10.setEnabled(true);
+                    jcomp11.setEnabled(true);
+                    jcomp12.setEnabled(true);
+                    numAgents.setEnabled(true);
+                    numObst.setEnabled(true);
+                    jcomp17.setEnabled(true);
+                    jcomp18.setEnabled(true);
+                    jcomp14.setEnabled(true);
+                    jcomp13.setEnabled(true);
+                    jcomp1.setEnabled(true);
+                    jcomp2.setEnabled(true);
+            }
+        }
     }
 
     public class textGui extends JPanel {
@@ -366,20 +443,20 @@ public class gui extends JPanel {
 
         public textGui() {
             //construct components
+            this.setBorder(BorderFactory.createTitledBorder("Results"));
             jcomp1 = new JTextArea (5, 5);
-            jcomp2 = new JLabel ("Results:");
+            JScrollPane jsp = new JScrollPane(jcomp1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
             //adjust size and set layout
             setPreferredSize (new Dimension (784, 454));
             setLayout (null);
-
+            jcomp1.setEnabled(false);
             //add components
-            add (jcomp1);
-            add (jcomp2);
+            add(jsp);
 
             //set component bounds (only needed by Absolute Positioning)
-            jcomp1.setBounds (2, 20, 779, 432);
-            jcomp2.setBounds (0, 0, 100, 25);
+            jsp.setBounds (2, 20, 779, 432);
+            //testText();
         }
 
         public void addText(String temp)
@@ -387,7 +464,21 @@ public class gui extends JPanel {
             jcomp1.append(temp);
         }
 
+        public void testText()
+        {
+            int i;
+            for(i = 0; i < 1000; i++)
+                jcomp1.append("a\n");
+        }
     }
     
-    //public class 
+    public class RunButtonListner implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            active = false;
+            gi.checkActive();
+            System.out.println("Clicked Run button");
+        }
+    }
 }
