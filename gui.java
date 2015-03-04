@@ -42,7 +42,7 @@ public class gui extends JPanel {
         defaultAgents = true;      //is accepting default agents
         agentsPresent = true;      //is agents present
         allWalk = false;            //is the all walk button set
-        blindWalk = true;          //is the blind walk button set
+        blindWalk = false;          //is the blind walk button set
         depthWalk = false;          //is the depth walk button set
         breadthWalk = false;        //is the breadth walk button set
         hillClimbWalk = false;      //is the hill-climbing walk button set
@@ -65,10 +65,6 @@ public class gui extends JPanel {
     {
         txtGui.addText(temp);
     }
-
-    public int getRowNumber() {
-		return rowNumber;
-	}
 
 	public void setRowNumber(int rowNumber) {
 		this.rowNumber = rowNumber;
@@ -186,6 +182,38 @@ public class gui extends JPanel {
 		this.colNum = colNum;
 	}
 
+    public double getNumberOfObstacles()
+    {
+        return gi.getNumObst();
+    }
+
+    public double getNumberOfAgents()
+    {
+        return gi.getNumAgents();
+    }
+
+    public int getRowNumber()
+    {
+        String ans = gi.getRowsAns();
+        int temp;
+        if(ans.isEmpty())
+            temp = 5;
+        else
+            temp = Integer.parseInt(ans);
+        return temp;
+    }
+
+    public int getColumnNumber()
+    {
+        String ans = gi.getColumnAns();
+        int temp;
+        if(ans.isEmpty())
+            temp = 5;
+        else
+            temp = Integer.parseInt(ans);
+        return temp;
+    }
+
     public void setEnabledComponents(boolean ans){
         if(ans)
         {
@@ -194,6 +222,25 @@ public class gui extends JPanel {
         }
     }
 
+    public void disableOtherWalks(boolean ans)
+    {
+        if(ans)
+        {
+            gi.disableBlind(true);
+            gi.disableDepth(true);
+            gi.disableBreadth(true);
+            gi.disableHillClimb(true);
+            gi.disableRandomRestart(true);
+        }
+        else
+        {
+            gi.disableBlind(false);
+            gi.disableDepth(false);
+            gi.disableBreadth(false);
+            gi.disableHillClimb(false);
+            gi.disableRandomRestart(false);
+        }
+    }
 
 
 	public class gui3 extends JPanel {
@@ -233,19 +280,21 @@ public class gui extends JPanel {
             rowsAns = new JTextField(5);
             columnAns = new JTextField(5);
             jcomp5 = new JToggleButton("Agents", false);
-            jcomp6 = new JRadioButton("Blind Walk");
-            jcomp7 = new JRadioButton("Depth Walk");
-            jcomp8 = new JRadioButton("Breadth Walk");
-            jcomp9 = new JRadioButton("Hill-Climbing Walk");
-            jcomp10 = new JRadioButton("Random Restart Hill-Climbing");
-            jcomp11 = new JRadioButton("All Walks");
+            jcomp6 = new JRadioButton("Blind Walk", blindWalk);
+            jcomp7 = new JRadioButton("Depth Walk", depthWalk);
+            jcomp8 = new JRadioButton("Breadth Walk", breadthWalk);
+            jcomp9 = new JRadioButton("Hill-Climbing Walk", hillClimbWalk);
+            jcomp10 = new JRadioButton("Random Restart Hill-Climbing", randomRestartWalk);
+            jcomp11 = new JRadioButton("All Walks", allWalk);
             jcomp12 = new JButton("Run");
             jcomp13 = new JLabel("Number of Obstacles:");
             jcomp14 = new JLabel("Number of Agents:");
             numAgents = new JTextField (5);
             numObst = new JTextField (5);
             jcomp17 = new JRadioButton("default number of Obstacles");
+            jcomp17.setSelected(true);
             jcomp18 = new JRadioButton("default number of Agents");
+            jcomp18.setSelected(true);
             jcomp19 = new JLabel("Color Key");
             jcomp20 = new JLabel("Agents");
             jcomp21 = new JLabel("Entry");
@@ -262,7 +311,7 @@ public class gui extends JPanel {
 
             //set components properties
             jcomp1.setToolTipText("Enter in the number of rows");
-            jcomp2.setToolTipText("Enter the number of columns");
+            jcomp2.setToolTipText("For Now only enter in the number of rows");
             jcomp5.setToolTipText("Click here if you want there to be Agents");
             jcomp6.setToolTipText("Click here for this algorithm");
             jcomp7.setToolTipText("Click here for this algorithm");
@@ -281,6 +330,7 @@ public class gui extends JPanel {
             setPreferredSize(new Dimension(784, 454));
             setLayout(null);
 
+            columnAns.setEnabled(false);
             if(!defaultObstacles)
                 numObst.setEnabled(false);
 
@@ -288,6 +338,17 @@ public class gui extends JPanel {
                 numAgents.setEnabled(false);
             checkActive();
             jcomp12.addActionListener(new RunButtonListner());
+            jcomp11.addActionListener(new AllWalkRadio());
+            jcomp6.addActionListener(new BlindWalkRadio());
+            jcomp7.addActionListener(new DepthWalkRadio());
+            jcomp8.addActionListener(new BreadthWalkRadio());
+            jcomp9.addActionListener(new HillClimbWalkRadio());
+            jcomp10.addActionListener(new RandomRestartWalkRadio());
+            jcomp17.addActionListener(new defaultObstacleRadio());
+            jcomp18.addActionListener(new defaultAgentsRadio());
+
+            checkNumObst();
+            checkNumAgents();
 
             //add components
             add(jcomp1);
@@ -304,8 +365,8 @@ public class gui extends JPanel {
             add(jcomp12);
             add(jcomp13);
             add(jcomp14);
-            add (numAgents);
-            add (numObst);
+            add(numAgents);
+            add(numObst);
             add(jcomp17);
             add(jcomp18);
             add(jcomp19);
@@ -351,6 +412,40 @@ public class gui extends JPanel {
 
         }
 
+        public boolean checkRadioSelected()
+        {
+            boolean ans = false;
+            if(jcomp6.isSelected())
+                ans = true;
+            if(jcomp7.isSelected())
+                ans = true;
+            if(jcomp8.isSelected())
+                ans = true;
+            if(jcomp9.isSelected())
+                ans = true;
+            if(jcomp10.isSelected())
+                ans = true;
+            if(jcomp11.isSelected())
+                ans = true;
+            return ans;
+        }
+
+        public void checkNumObst()
+        {
+            if(jcomp17.isSelected())
+                numObst.setEnabled(false);
+            else
+                numObst.setEnabled(true);
+        }
+
+        public void checkNumAgents()
+        {
+            if(jcomp18.isSelected())
+                numAgents.setEnabled(false);
+            else
+                numAgents.setEnabled(true);
+        }
+
 		public String getRowsAns() {
 			return rowsAns.getText();
 		}
@@ -367,16 +462,28 @@ public class gui extends JPanel {
 			this.columnAns.setText(temp);;
 		}
 
-		public String getNumAgents() {
-			return numAgents.getText();
+		public double getNumAgents() {
+            String ans = numAgents.getText();
+            double num = 0;
+            if(ans.isEmpty())
+                num = .10;
+            else
+                num = Integer.parseInt(ans);
+			return num;
 		}
 
 		public void setNumAgents(String temp) {
 			this.numAgents.setText(temp);;
 		}
 
-		public String getNumObst() {
-			return numObst.getText();
+		public double getNumObst() {
+            String ans = numObst.getText();
+            double num = 0;
+            if(ans.isEmpty())
+                num = .20;
+            else
+                num = Double.parseDouble(ans);
+            return num;
 		}
 
 		public void setNumObst(String temp) {
@@ -389,6 +496,62 @@ public class gui extends JPanel {
                 this.rowsAns.setEnabled(false);
         }
 
+        public void disableBlind(boolean ans)
+        {
+            if(ans)
+            {
+                jcomp6.setEnabled(false);
+                jcomp6.setSelected(false);
+            }
+            else
+                jcomp6.setEnabled(true);
+        }
+
+        public void disableDepth(boolean ans)
+        {
+            if(ans)
+            {
+                jcomp7.setEnabled(false);
+                jcomp7.setSelected(false);
+            }
+            else
+                jcomp7.setEnabled(true);
+        }
+
+        public void disableBreadth(boolean ans)
+        {
+            if(ans)
+            {
+                jcomp8.setEnabled(false);
+                jcomp8.setSelected(false);
+            }
+            else
+                jcomp8.setEnabled(true);
+        }
+
+        public void disableHillClimb(boolean ans)
+        {
+            if(ans)
+            {
+                jcomp9.setEnabled(false);
+                jcomp9.setSelected(false);
+            }
+            else
+                jcomp9.setEnabled(true);
+        }
+
+        public void disableRandomRestart(boolean ans)
+        {
+            if(ans)
+            {
+                jcomp10.setEnabled(false);
+                jcomp10.setSelected(false);
+            }
+            else
+                jcomp10.setEnabled(true);
+
+        }
+
         public void checkActive()
         {
             System.out.println("check active: " + active);
@@ -396,7 +559,7 @@ public class gui extends JPanel {
             {
                 System.out.println("Active is " + active);
                 rowsAns.setEnabled(false);
-                columnAns.setEnabled(false);
+                //columnAns.setEnabled(false);
                 jcomp5.setEnabled(false);
                 jcomp6.setEnabled(false);
                 jcomp7.setEnabled(false);
@@ -418,7 +581,7 @@ public class gui extends JPanel {
             {
                     System.out.println("Active is " + active);
                     rowsAns.setEnabled(true);
-                    columnAns.setEnabled(true);
+                    //columnAns.setEnabled(true);
                     jcomp5.setEnabled(true);
                     jcomp6.setEnabled(true);
                     jcomp7.setEnabled(true);
@@ -427,8 +590,8 @@ public class gui extends JPanel {
                     jcomp10.setEnabled(true);
                     jcomp11.setEnabled(true);
                     jcomp12.setEnabled(true);
-                    numAgents.setEnabled(true);
-                    numObst.setEnabled(true);
+                    checkNumObst();
+                    checkNumAgents();
                     jcomp17.setEnabled(true);
                     jcomp18.setEnabled(true);
                     jcomp14.setEnabled(true);
@@ -481,7 +644,81 @@ public class gui extends JPanel {
             active = false;
             gi.checkActive();
             System.out.println("Clicked Run button");
-            main.startWalking();
+            if(gi.checkRadioSelected())
+                main.startWalking();
+            else
+                addText("No algorithm selected\n");
+            setEnabledComponents(true);
         }
     }
+
+    public class AllWalkRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            allWalk = !allWalk;
+            if(allWalk)
+            {
+                disableOtherWalks(true);
+            }
+            else
+                disableOtherWalks(false);
+        }
+    }
+
+    public class BlindWalkRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            blindWalk = !blindWalk;
+        }
+    }
+
+    public class DepthWalkRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            depthWalk = !depthWalk;
+        }
+    }
+
+    public class BreadthWalkRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            breadthWalk = !breadthWalk;
+        }
+    }
+
+    public class HillClimbWalkRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            hillClimbWalk = !hillClimbWalk;
+        }
+    }
+    public class RandomRestartWalkRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            randomRestartWalk = !randomRestartWalk;
+        }
+    }
+
+    public class defaultObstacleRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            gi.checkNumObst();
+        }
+    }
+
+    public class defaultAgentsRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            gi.checkNumAgents();
+        }
+    }
+
 }

@@ -13,6 +13,7 @@ public class RandomRestartWalk {
     private boolean foundTreasure;
     private boolean hitWall;
     private boolean foundAgent;
+    private boolean foundLocalMinimum;
     private Log log;
 
 	public RandomRestartWalk(Robot roy, Map mps, Log lg) {
@@ -28,6 +29,7 @@ public class RandomRestartWalk {
         foundAgent = false;
         log = lg;
         lg.printResponse("Random Restart\n");
+        foundLocalMinimum = false;
         this.walking();
 	}
 
@@ -39,33 +41,7 @@ public class RandomRestartWalk {
 
     public void walking()
     {
-        boolean running = true;
-        while(searchingTreasure(currentNode, running))
-        {
-            log.printBoth("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
-            store.add(currentNode);
-            currentNode = this.getNextNode(currentNode);
-            if(currentNode == null)
-            {
-            	running = false;
-            	log.printBoth("Reached local maximum");
-            }
-        }
-        if(robby.getSteps() >= 10000)
-            log.printBoth("out of steps");
-        else if(currentNode != null)
-        {
-        	if(currentNode.isTreasure())
-        		log.printBoth("has treasure");
-	
-        }
-    	else if(isEntrySpaceAvailable())
-    	{
-    		restartHome();
-    		this.walking();
-    	}
-    	else
-    		return;		
+        this.WalkingToTreasure();
     
         	
         log.printBoth("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
@@ -79,14 +55,92 @@ public class RandomRestartWalk {
         }*/
     }
 
+    public void WalkingToTreasure()
+    {
+        int steps = 0;
+        boolean running = true;
+        while(searchingTreasure(currentNode, running))
+        {
+            log.printBoth("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
+            store.add(currentNode);
+            currentNode = this.getNextNode(currentNode);
+            if(currentNode == null)
+            {
+                running = false;
+                foundLocalMinimum = true;
+                log.printBoth("Reached local maximum");
+            }
+        }
+        if(robby.getSteps() >= 10000)
+            log.printBoth("out of steps");
+        else if(currentNode != null)
+        {
+            if(currentNode.isTreasure())
+                log.printBoth("has treasure");
+
+        }
+        else if(isEntrySpaceAvailable())
+        {
+            restartHome();
+            this.WalkingToTreasure();
+        }
+        else
+            return;
+    }
+
+    public void WalkingToHome()
+    {
+        int steps = 0;
+        boolean running = true;
+        while(searchingHome(currentNode, running))
+        {
+            log.printBoth("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
+            store.add(currentNode);
+            currentNode = this.getNextNode(currentNode);
+            if(currentNode == null)
+            {
+                running = false;
+                foundLocalMinimum = true;
+                log.printBoth("Reached local maximum");
+            }
+        }
+        if(robby.getSteps() >= 10000)
+            log.printBoth("out of steps");
+        else if(currentNode != null)
+        {
+            if(currentNode.isTreasure())
+                log.printBoth("has treasure");
+
+        }
+        else if(isEntrySpaceAvailable())
+        {
+            restartHome();
+            this.WalkingToTreasure();
+        }
+        else
+            return;
+    }
+
     public boolean searchingTreasure(Node temp, boolean running)
     {
         boolean ans = true;
         if(running == false)
             ans = false;
-        else if(robby.getSteps() == 10000)
+        if(robby.getSteps() == 10000)
             ans = false;
-        else if(temp.isTreasure())
+        if(temp.isTreasure())
+            ans = false;
+        return ans;
+    }
+
+    public boolean searchingHome(Node temp, boolean running)
+    {
+        boolean ans = true;
+        if(!running)
+            ans = false;
+        if(robby.getSteps() == 10000)
+            ans = false;
+        if(temp.isEntry())
             ans = false;
         return ans;
     }

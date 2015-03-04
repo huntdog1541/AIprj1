@@ -18,16 +18,16 @@ public class Map {
     boolean setAgentsOn;
     Log log;
 	
-	public Map(int boundary, double obsPer, double agPer, boolean agtOn, Log lg)
+	public Map(int xbdary, int ybdary, double obsPer, double agPer, boolean agtOn, Log lg)
 	{
-		xboundary = boundary;
-		yboundary = boundary;
-		numObstacle = (int)Math.floor((boundary * boundary) * obsPer);
+		xboundary = xbdary;
+		yboundary = ybdary;
+		numObstacle = (int)Math.floor((xbdary * ybdary) * obsPer);
  		numTreasure = 1;
-		numAgents   = (int)Math.floor((boundary * boundary) * agPer);
+		numAgents   = (int)Math.floor((xbdary * ybdary) * agPer);
 		entryY		= 0;
 		entryX		= 0;
-		arry = new Block[boundary][boundary];
+		arry = new Block[xbdary][ybdary];
 		rand = new Random();
         setAgentsOn = agtOn;
         log = lg;
@@ -43,9 +43,9 @@ public class Map {
 	public void initArray()
 	{
 		int i, j;
-		for(i = 0; i < yboundary; i++)
+		for(i = 0; i < xboundary; i++)
 		{
-			for(j = 0; j < xboundary; j++)
+			for(j = 0; j < yboundary; j++)
 			{
 				arry[i][j] = new Block(i, j);
 			}
@@ -334,6 +334,18 @@ public class Map {
         if(arry[y][x].isEntry())
             ans = false;
         return ans;
+    }
+
+    public void resetMapSteps()
+    {
+        int i, j;
+        for(i = 0; i < xboundary; i++)
+        {
+            for(j = 0; j < yboundary; j++)
+            {
+                arry[i][j].setTrans(0);
+            }
+        }
     }
 
     public void printInfo(String... args)

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AIprj1:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/AIprj1_jar</output-path>
+    <root id="archive" name="AIprj1.jar">
+      <element id="module-output" name="AIprj1" />
+    </root>
+  </artifact>
+</component>

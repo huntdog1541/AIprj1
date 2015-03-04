@@ -23,9 +23,10 @@ public class Main {
         frame.setVisible(true);
         frame.getContentPane().setSize(800, 400);
         gi = new gui(mn);
+        log = new Log(gi);
         frame.getContentPane().add(gi);
         frame.pack();
-        log = new Log(gi);
+
         
     }
 
@@ -33,20 +34,24 @@ public class Main {
 
     public void startWalking()
     {
-    	int rowSize = 0;
-    	int columnSize = 0;
-    	double percentageAgents = 0;
-    	double percentageObstacles = 0;
-    	boolean agentsPres = false;
+    	int rowSize = gi.getRowNumber();
+    	int columnSize = gi.getRowNumber();
+    	double percentageAgents = gi.getNumberOfAgents();
+    	double percentageObstacles = gi.getNumberOfObstacles();
+    	boolean agentsPres = gi.isAgentsPresent();
     	
         
-        map = new Map(5, .20, .10, false, log);
+        map = new Map(rowSize, columnSize, percentageObstacles, percentageAgents, agentsPres, log);
         robby = new Robot(map, log, gi);
         robby.setWalking();
         System.out.println("Done walking");
-        gph = new Graphs(map);
         System.out.println("Creating Graphs");
-        gi.setEnabledComponents(true);
+
+    }
+
+    public void addToLog(String msg)
+    {
+        log.addString(msg);
     }
 
 	public static gui getGi() {
