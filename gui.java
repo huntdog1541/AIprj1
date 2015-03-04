@@ -29,10 +29,12 @@ public class gui extends JPanel {
     private boolean active;             //has the run button been pressed
     private boolean rowNum;             //has the row number been entered
     private boolean colNum;             //has the column number been entered
+    private Main main;
 
 
-    public gui() {
+    public gui(Main temp) {
 
+    	main = temp;
         rowNumber = 0;
         colNumber = 0;
         hasAgents = false;
@@ -450,7 +452,7 @@ public class gui extends JPanel {
             //adjust size and set layout
             setPreferredSize (new Dimension (784, 454));
             setLayout (null);
-            jcomp1.setEnabled(false);
+            jcomp1.setEditable(false);
             //add components
             add(jsp);
 
@@ -479,6 +481,7 @@ public class gui extends JPanel {
             active = false;
             gi.checkActive();
             System.out.println("Clicked Run button");
+            main.startWalking();
         }
     }
 }

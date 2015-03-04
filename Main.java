@@ -22,26 +22,72 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.getContentPane().setSize(800, 400);
-        gi = new gui();
+        gi = new gui(mn);
         frame.getContentPane().add(gi);
         frame.pack();
         log = new Log(gi);
+        
+    }
+
+
+
+    public void startWalking()
+    {
+    	int rowSize = 0;
+    	int columnSize = 0;
+    	double percentageAgents = 0;
+    	double percentageObstacles = 0;
+    	boolean agentsPres = false;
+    	
+        
         map = new Map(5, .20, .10, false, log);
         robby = new Robot(map, log, gi);
-        mn.waitingLoop();
+        robby.setWalking();
+        System.out.println("Done walking");
+        gph = new Graphs(map);
+        System.out.println("Creating Graphs");
+        gi.setEnabledComponents(true);
     }
 
+	public static gui getGi() {
+		return gi;
+	}
 
+	public static void setGi(gui gi) {
+		Main.gi = gi;
+	}
 
-    public void waitingLoop()
-    {
-        while(true)
-        {
-            if(!gi.isActive()) {
-                robby.setWalking();
-                gph = new Graphs(map);
-                gi.setEnabledComponents(true);
-            }
-        }
-    }
+	public static Robot getRobby() {
+		return robby;
+	}
+
+	public static void setRobby(Robot robby) {
+		Main.robby = robby;
+	}
+
+	public static Map getMap() {
+		return map;
+	}
+
+	public static void setMap(Map map) {
+		Main.map = map;
+	}
+
+	public static Log getLog() {
+		return log;
+	}
+
+	public static void setLog(Log log) {
+		Main.log = log;
+	}
+
+	public static Graphs getGph() {
+		return gph;
+	}
+
+	public static void setGph(Graphs gph) {
+		Main.gph = gph;
+	}
+    
+    
 }

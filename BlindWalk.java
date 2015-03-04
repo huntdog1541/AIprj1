@@ -42,7 +42,7 @@ public class BlindWalk {
 	{
 		int nextX = xposition, nextY = yposition;
 		dirct nextDirection = dirct.EAST;
-		while((robby.isAlive()) && (!robby.hasTreasure()) && (robby.getSteps() < 10000))
+		while((robby.isAlive()) && (!robby.hasTreasure()) && (robby.getSteps() < 100))
 		{
 			nextX = xposition;
 			nextY = yposition;
@@ -80,7 +80,7 @@ public class BlindWalk {
 	{
 		int nextX = xposition, nextY = yposition;
 		dirct nextDirection = dirct.EAST;
-		while((robby.isAlive()) && (!robby.atEntry()) && (robby.getSteps() < 10000))
+		while((robby.isAlive()) && (!robby.atEntry()) && (robby.getSteps() < 100))
 		{
 			nextX = xposition;
 			nextY = yposition;
