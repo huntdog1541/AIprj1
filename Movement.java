@@ -37,7 +37,10 @@ public class Movement {
 
     public void exeAllWalk(Robot robby, Map map)
     {
+        long blindWalkTime = Runtime.getRuntime().totalMemory();
         walk = new BlindWalk(robby, map, log);
+        blindWalkTime = Runtime.getRuntime().totalMemory() - blindWalkTime;
+        log.printBoth("The total memory for Blind Walk is " + blindWalkTime);
         graph1 = new Graphs(map, "Blind Walk");
         map.resetMapSteps();
         walk1 = new DepthWalk(robby, map, log);
@@ -58,31 +61,49 @@ public class Movement {
     {
         if(gi.isBlindWalk())
         {
+            long blindWalkTime = Runtime.getRuntime().totalMemory();
             walk = new BlindWalk(robby, map, log);
+            blindWalkTime = Runtime.getRuntime().totalMemory() - blindWalkTime;
+            log.printBoth("The total memory for Blind Walk is " + blindWalkTime);
             graph1 = new Graphs(map, "Blind Walk");
             map.resetMapSteps();
         }
         if(gi.isDepthWalk())
         {
+            long DepthWalkTime = Runtime.getRuntime().totalMemory();
             walk1 = new DepthWalk(robby, map, log);
+            DepthWalkTime = Runtime.getRuntime().totalMemory() - DepthWalkTime;
+            log.printBoth("The total memory for Depth Walk is " + DepthWalkTime);
             graph1 = new Graphs(map, "Depth Walk");
             map.resetMapSteps();
         }
         if(gi.isBreadthWalk())
         {
+            long BreadthWalkTime = Runtime.getRuntime().totalMemory();
             walk2 = new BreadthWalk(robby, map, log);
+            BreadthWalkTime = Runtime.getRuntime().totalMemory() - BreadthWalkTime;
+            log.printBoth("The total memory for Breadth Walk is " + BreadthWalkTime);
             graph1 = new Graphs(map, "Breadth Walk");
             map.resetMapSteps();
         }
         if(gi.isHillClimbWalk())
         {
+            long HillClimbWalkTime = Runtime.getRuntime().totalMemory();
             walk3 = new HillClimbingWalk(robby, map, log);
+            HillClimbWalkTime = Runtime.getRuntime().totalMemory() - HillClimbWalkTime;
+            log.printBoth("The total memory for Hill Climbing Walk is " + HillClimbWalkTime);
             graph1 = new Graphs(map, "Hill-Climbing Walk");
             map.resetMapSteps();
         }
         if(gi.isRandomRestartWalk())
         {
+            long RandomRestartWalkTime = Runtime.getRuntime().totalMemory();
+            log.printBoth("The start memory is " + RandomRestartWalkTime);
             walk4 = new RandomRestartWalk(robby, map, log);
+            long endWalkTime = Runtime.getRuntime().totalMemory();
+            RandomRestartWalkTime = endWalkTime - RandomRestartWalkTime;
+            log.printBoth("The end memory is " + endWalkTime);
+            log.printBoth("The total memory for Random Restart Walk is " + RandomRestartWalkTime);
             graph1 = new Graphs(map, "Random Restart Hill-Climbing Walk");
             map.resetMapSteps();
         }

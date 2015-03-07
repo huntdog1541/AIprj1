@@ -14,7 +14,6 @@ public class gui extends JPanel {
 
     private int rowNumber;
     private int colNumber;
-    private boolean hasAgents;
     private gui3 gi;
     private textGui txtGui;
     private boolean defaultObstacles;   //is accepting default obstacles
@@ -37,7 +36,6 @@ public class gui extends JPanel {
     	main = temp;
         rowNumber = 0;
         colNumber = 0;
-        hasAgents = false;
         defaultObstacles = true;   //is accepting default obstacles
         defaultAgents = true;      //is accepting default agents
         agentsPresent = true;      //is agents present
@@ -79,11 +77,7 @@ public class gui extends JPanel {
 	}
 
 	public boolean isHasAgents() {
-		return hasAgents;
-	}
-
-	public void setHasAgents(boolean hasAgents) {
-		this.hasAgents = hasAgents;
+		return agentsPresent;
 	}
 
 	public boolean isDefaultObstacles() {
@@ -182,12 +176,12 @@ public class gui extends JPanel {
 		this.colNum = colNum;
 	}
 
-    public double getNumberOfObstacles()
+    public int getNumberOfObstacles()
     {
         return gi.getNumObst();
     }
 
-    public double getNumberOfAgents()
+    public int getNumberOfAgents()
     {
         return gi.getNumAgents();
     }
@@ -258,8 +252,8 @@ public class gui extends JPanel {
         private JButton jcomp12;
         private JLabel jcomp13;
         private JLabel jcomp14;
-        private JTextField numAgents;
-        private JTextField numObst;
+        private JSpinner numAgents;
+        private JSpinner numObst;
         private JRadioButton jcomp17;
         private JRadioButton jcomp18;
         private JLabel jcomp19;
@@ -271,6 +265,8 @@ public class gui extends JPanel {
         private JPanel obstacleColor;
         private JPanel treasureColor;
         private JPanel entryColor;
+        private SpinnerNumberModel mode;
+        private SpinnerNumberModel mode2;
 
         public gui3() {
             //construct components
@@ -287,10 +283,12 @@ public class gui extends JPanel {
             jcomp10 = new JRadioButton("Random Restart Hill-Climbing", randomRestartWalk);
             jcomp11 = new JRadioButton("All Walks", allWalk);
             jcomp12 = new JButton("Run");
-            jcomp13 = new JLabel("Number of Obstacles:");
-            jcomp14 = new JLabel("Number of Agents:");
-            numAgents = new JTextField (5);
-            numObst = new JTextField (5);
+            jcomp13 = new JLabel("Percentage of Obstacles:");
+            jcomp14 = new JLabel("Percentage of Agents:");
+            mode = new SpinnerNumberModel(10, 0, 100, 1);
+            numAgents = new JSpinner (mode);
+            mode2 = new SpinnerNumberModel(20, 0, 100, 1);
+            numObst = new JSpinner (mode2);
             jcomp17 = new JRadioButton("default number of Obstacles");
             jcomp17.setSelected(true);
             jcomp18 = new JRadioButton("default number of Agents");
@@ -320,11 +318,12 @@ public class gui extends JPanel {
             jcomp10.setToolTipText("Click here for this algorithm");
             jcomp11.setToolTipText("Click here for this algorithm");
             jcomp12.setToolTipText("Click here to run the simulation");
-            jcomp13.setToolTipText("Enter the number of obstacles");
-            jcomp14.setToolTipText("Enter the number of agents");
+            jcomp13.setToolTipText("Enter the percentage of obstacles");
+            jcomp14.setToolTipText("Enter the percentage of agents");
             numObst.setToolTipText("Enter the number of obstacles");
             jcomp17.setToolTipText("Click here to accept the number of obstacles");
             jcomp18.setToolTipText("Click here to accept the default number of agents");
+
 
             //adjust size and set layout
             setPreferredSize(new Dimension(784, 454));
@@ -346,6 +345,7 @@ public class gui extends JPanel {
             jcomp10.addActionListener(new RandomRestartWalkRadio());
             jcomp17.addActionListener(new defaultObstacleRadio());
             jcomp18.addActionListener(new defaultAgentsRadio());
+            jcomp5.addActionListener(new AgentsPresent());
 
             checkNumObst();
             checkNumAgents();
@@ -432,8 +432,10 @@ public class gui extends JPanel {
 
         public void checkNumObst()
         {
-            if(jcomp17.isSelected())
+            if(jcomp17.isSelected()) {
+                numObst.setValue(20);
                 numObst.setEnabled(false);
+            }
             else
                 numObst.setEnabled(true);
         }
@@ -441,7 +443,10 @@ public class gui extends JPanel {
         public void checkNumAgents()
         {
             if(jcomp18.isSelected())
+            {
+                numAgents.setValue(10);
                 numAgents.setEnabled(false);
+            }
             else
                 numAgents.setEnabled(true);
         }
@@ -462,32 +467,22 @@ public class gui extends JPanel {
 			this.columnAns.setText(temp);;
 		}
 
-		public double getNumAgents() {
-            String ans = numAgents.getText();
-            double num = 0;
-            if(ans.isEmpty())
-                num = .10;
-            else
-                num = Integer.parseInt(ans);
-			return num;
+		public int getNumAgents() {
+            int ans = new Integer(mode.getNumber().toString());
+			return ans;
 		}
 
 		public void setNumAgents(String temp) {
-			this.numAgents.setText(temp);;
+			this.numAgents.setValue(temp);;
 		}
 
-		public double getNumObst() {
-            String ans = numObst.getText();
-            double num = 0;
-            if(ans.isEmpty())
-                num = .20;
-            else
-                num = Double.parseDouble(ans);
-            return num;
+		public int getNumObst() {
+            int ans = new Integer(mode2.getNumber().toString());
+            return ans;
 		}
 
 		public void setNumObst(String temp) {
-			this.numObst.setText(temp);
+			this.numObst.setValue(temp);
 		}
 
         public void greyRowAns(boolean val)
@@ -718,6 +713,14 @@ public class gui extends JPanel {
         public void actionPerformed(ActionEvent e)
         {
             gi.checkNumAgents();
+        }
+    }
+
+    public class AgentsPresent implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            agentsPresent = !agentsPresent;
         }
     }
 

@@ -31,6 +31,13 @@ public class Node {
             obstacle = map.isMoveBlocked(y, x);
             entry = map.steppingOnEntry(y, x);
         }
+        else
+        {
+            treasure = false;
+            agent = false;
+            obstacle = false;
+            entry = false;
+        }
         evaluateDistance(map);
 	}
 
@@ -101,14 +108,14 @@ public class Node {
     {
 		if(evalObstacle())
 		{
-			map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
+			//map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
 			return;
 		}
         int treX, treY;
         treX = map.getTreasureX();
         treY = map.getTreasureY();
         eval = Math.sqrt(Math.pow((x-treX), 2) + Math.pow((y-treY), 2));
-        map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
+        //map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
     }
 
     public void reevaluateDistance(Map map)
@@ -116,14 +123,14 @@ public class Node {
         eval = 0;
         if(evalObstacle())
         {
-            map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
+            //map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
             return;
         }
         int treX, treY;
         treX = map.getEntryX();
         treY = map.getEntryY();
         eval = Math.sqrt(Math.pow((x-treX), 2) + Math.pow((y-treY), 2));
-        map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
+        //map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
     }
 	
 	public boolean evalObstacle()

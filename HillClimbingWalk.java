@@ -14,6 +14,9 @@ public class HillClimbingWalk {
     private boolean foundTreasure;
     private boolean hitWall;
     private boolean foundAgent;
+    private boolean foundLocalMinimum;
+    private boolean success;
+    private boolean running;
     private Log log;
 
 	public HillClimbingWalk(Robot roy, Map mps, Log lg) {
@@ -28,50 +31,149 @@ public class HillClimbingWalk {
         hitWall = false;
         foundAgent = false;
         log = lg;
+        foundLocalMinimum = true;
+        running = true;
+        success = false;
         log.printResponse("Hill-Climbing Walk\n");
         this.walking();
 	}
 
     public void walking()
     {
+        walkingToTreasure();
+        WalkingToHome();
+        if(!foundLocalMinimum)
+        {
+            if(!running)
+            {
+                if(robby.isAlive())
+                    success = true;
+            }
+        }
+    }
+
+    public boolean getSuccess()
+    {
+        return success;
+    }
+
+    public void walkingToTreasure()
+    {
         boolean running = true;
-        while(searchingTreasure(currentNode, running))
+        int steps = 1;
+        while(searchingTreasure(currentNode))
         {
             log.printBoth("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
             store.add(currentNode);
             currentNode = this.getNextNode(currentNode);
             if(currentNode == null)
             {
-            	running = false;
-            	log.printBoth("Reached local maximum");
+                running = false;
+                log.printBoth("Reached local maximum");
+            }
+            else if(currentNode.isAgent())
+            {
+                robby.increaseStep(currentNode.getY(), currentNode.getX());
+                steps++;
+                log.printBoth("Robby is dead");
+                running = false;
+            }
+            else
+            {
+                robby.increaseStep(currentNode.getY(), currentNode.getX());
+                steps++;
             }
         }
         if(robby.getSteps() == 10000)
             log.printResponse("out of steps");
         if(currentNode != null)
-        	if(currentNode.isTreasure())
-        		log.printResponse("Robby has treasure");
-        log.printBoth("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
-        /*
-        while(!temp.isEntry())
         {
-            addNext();
-            list.remove(0);
-            store.add(temp);
-            temp = list.get(0);
-        }*/
+            if(currentNode.isTreasure()) {
+                log.printBoth("Robby has treasure");
+                log.printBoth("The steps to treasure is " + steps);
+            }
+        }
+        list.clear();
+        store.clear();
     }
 
-    public boolean searchingTreasure(Node temp, boolean running)
+
+    public void WalkingToHome()
+    {
+        int steps = 1;
+        foundLocalMinimum = false;
+        while(searchingHome(currentNode))
+        {
+            log.printBoth("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
+            store.add(currentNode);
+            currentNode = this.getNextNodeHome(currentNode);;
+            if(currentNode == null)
+            {
+                running = false;
+                foundLocalMinimum = true;
+                log.printBoth("Reached local maximum");
+            }
+            else if(currentNode.isAgent())
+            {
+                robby.increaseStep(currentNode.getY(), currentNode.getX());
+                steps++;
+                log.printBoth("Robby is dead");
+                running = false;
+            }
+            else
+            {
+                robby.increaseStep(currentNode.getY(), currentNode.getX());
+                steps++;
+            }
+        }
+        if(robby.getSteps() >= 10000)
+            log.printBoth("out of steps");
+        else if(currentNode != null)
+        {
+            if(currentNode.isEntry())
+            {
+                log.printBoth("Robby is home");
+                log.printBoth("Steps to home: " + steps);
+            }
+        }
+        list.clear();
+        store.clear();
+    }
+
+    public boolean searchingTreasure(Node temp)
     {
         boolean ans = true;
-        if(running == false)
-            ans = false;
+        if(temp == null)
+            return false;
+        if(!running)
+            return false;
         else if(robby.getSteps() == 10000)
             ans = false;
         else if(temp.isTreasure())
             ans = false;
         return ans;
+    }
+
+    public boolean searchingHome(Node temp)
+    {
+        boolean ans = true;
+        if(temp == null)
+            return false;
+        if(!running)
+            ans = false;
+        if(robby.getSteps() == 10000)
+            ans = false;
+        if(temp.isEntry())
+            ans = false;
+        return ans;
+    }
+
+    public void homeEvaluate()
+    {
+        for(Node n : store)
+        {
+            n.reevaluateDistance(map);
+        }
     }
 
     public Node getNextNode(Node temp)
@@ -92,10 +194,7 @@ public class HillClimbingWalk {
                     {
                     	if(temp2.compareEval(temp))
                     	{
-                    		if(ans == null)
-                    			ans = temp2;
-                    		else if(temp2.compareEval(ans))
-                    			ans = temp2;
+                    		ans = temp2;
                     	}
                     }  
          	   }
@@ -103,6 +202,36 @@ public class HillClimbingWalk {
             dt = getNextDirect(dt);
     	}
     	return ans;
+    }
+
+    public Node getNextNodeHome(Node temp)
+    {
+        int i, nwX, nwY;
+        temp.reevaluateDistance(map);
+        direction dt = direction.WEST;
+        Node ans = null;
+        for(i = 0; i < 4; i++)
+        {
+            nwX = getNextX(temp, dt);
+            nwY = getNextY(temp, dt);
+            if((nwX != temp.getX()) || (nwY != temp.getY()))
+            {
+                if(map.isValidMove(nwY, nwX))
+                {
+                    Node temp2 = new Node(nwX, nwY, map);
+                    temp2.reevaluateDistance(map);
+                    if(!checkAdded(temp2))
+                    {
+                        if(temp2.compareEval(temp))
+                        {
+                            ans = temp2;
+                        }
+                    }
+                }
+            }
+            dt = getNextDirect(dt);
+        }
+        return ans;
     }
     
     public direction getNextDirect(direction dirt)

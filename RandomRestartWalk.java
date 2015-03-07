@@ -14,6 +14,8 @@ public class RandomRestartWalk {
     private boolean hitWall;
     private boolean foundAgent;
     private boolean foundLocalMinimum;
+    private boolean success;
+    private boolean running;
     private Log log;
 
 	public RandomRestartWalk(Robot roy, Map mps, Log lg) {
@@ -30,6 +32,8 @@ public class RandomRestartWalk {
         log = lg;
         lg.printResponse("Random Restart\n");
         foundLocalMinimum = false;
+        success = false;
+        running = true;
         this.walking();
 	}
 
@@ -37,29 +41,37 @@ public class RandomRestartWalk {
 	{
 		NORTH, SOUTH, EAST, WEST
 	}
-	
+
 
     public void walking()
     {
-        this.WalkingToTreasure();
-    
-        	
-        log.printBoth("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
-        /*
-        while(!temp.isEntry())
+        long RandomRestartWalkTime = Runtime.getRuntime().totalMemory();
+        log.printBoth("The start memory is " + RandomRestartWalkTime);
+
+
+        walkingToTreasure();
+        WalkingToHome();
+        if(!foundLocalMinimum)
         {
-            addNext();
-            list.remove(0);
-            store.add(temp);
-            temp = list.get(0);
-        }*/
+            if(!running)
+            {
+                if(robby.isAlive())
+                    success = true;
+            }
+        }
+        log.printBoth("The number of total steps is " + robby.getSteps());
+
+        long endWalkTime = Runtime.getRuntime().totalMemory();
+        RandomRestartWalkTime = endWalkTime - RandomRestartWalkTime;
+        log.printBoth("The end memory is " + endWalkTime);
+        log.printBoth("The total memory for Random Restart Walk is " + RandomRestartWalkTime);
+
     }
 
-    public void WalkingToTreasure()
+    public void walkingToTreasure()
     {
-        int steps = 0;
-        boolean running = true;
-        while(searchingTreasure(currentNode, running))
+        int steps = 1;
+        while(searchingTreasure(currentNode))
         {
             log.printBoth("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
             store.add(currentNode);
@@ -67,64 +79,91 @@ public class RandomRestartWalk {
             if(currentNode == null)
             {
                 running = false;
-                foundLocalMinimum = true;
                 log.printBoth("Reached local maximum");
             }
+            else if(currentNode.isAgent())
+            {
+                robby.increaseStep(currentNode.getY(), currentNode.getX());
+                steps++;
+                log.printBoth("Robby is dead");
+                running = false;
+            }
+            else
+            {
+                robby.increaseStep(currentNode.getY(), currentNode.getX());
+                steps++;
+            }
         }
-        if(robby.getSteps() >= 10000)
-            log.printBoth("out of steps");
-        else if(currentNode != null)
+        if(robby.getSteps() == 10000)
+            log.printResponse("out of steps");
+        if(currentNode != null)
         {
-            if(currentNode.isTreasure())
-                log.printBoth("has treasure");
-
+            if(currentNode.isTreasure()) {
+                log.printBoth("Robby has treasure");
+                log.printBoth("The steps to treasure is " + steps);
+            }
         }
         else if(isEntrySpaceAvailable())
         {
             restartHome();
-            this.WalkingToTreasure();
+            this.walkingToTreasure();
         }
         else
             return;
+
+        previousEntries.clear();
+        store.clear();
     }
 
     public void WalkingToHome()
     {
-        int steps = 0;
-        boolean running = true;
-        while(searchingHome(currentNode, running))
+        int steps = 1;
+        foundLocalMinimum = false;
+        while(searchingHome(currentNode))
         {
             log.printBoth("At Y: " + currentNode.getY() + " and X: " + currentNode.getX());
             store.add(currentNode);
-            currentNode = this.getNextNode(currentNode);
+            currentNode = this.getNextNodeHome(currentNode);
             if(currentNode == null)
             {
                 running = false;
                 foundLocalMinimum = true;
                 log.printBoth("Reached local maximum");
             }
+            else if(currentNode.isAgent())
+            {
+                robby.increaseStep(currentNode.getY(), currentNode.getX());
+                steps++;
+                log.printBoth("Robby is dead");
+                running = false;
+            }
+            else
+            {
+                robby.increaseStep(currentNode.getY(), currentNode.getX());
+                steps++;
+            }
         }
         if(robby.getSteps() >= 10000)
             log.printBoth("out of steps");
         else if(currentNode != null)
         {
-            if(currentNode.isTreasure())
-                log.printBoth("has treasure");
+            if(currentNode.isEntry())
+            {
+                log.printBoth("Robby is home");
+                log.printBoth("Steps to home: " + steps);
+            }  
+        }
 
-        }
-        else if(isEntrySpaceAvailable())
-        {
-            restartHome();
-            this.WalkingToTreasure();
-        }
-        else
-            return;
+        previousEntries.clear();
+        store.clear();
     }
 
-    public boolean searchingTreasure(Node temp, boolean running)
+    public boolean searchingTreasure(Node temp)
     {
         boolean ans = true;
-        if(running == false)
+        if(temp == null)
+            return false;
+        if(!running)
             ans = false;
         if(robby.getSteps() == 10000)
             ans = false;
@@ -133,11 +172,13 @@ public class RandomRestartWalk {
         return ans;
     }
 
-    public boolean searchingHome(Node temp, boolean running)
+    public boolean searchingHome(Node temp)
     {
         boolean ans = true;
+        if(temp == null)
+            return false;
         if(!running)
-            ans = false;
+            return false;
         if(robby.getSteps() == 10000)
             ans = false;
         if(temp.isEntry())
@@ -174,6 +215,36 @@ public class RandomRestartWalk {
             dt = getNextDirect(dt);
     	}
     	return ans;
+    }
+
+    public Node getNextNodeHome(Node temp)
+    {
+        int i, nwX, nwY;
+        temp.reevaluateDistance(map);
+        direction dt = direction.WEST;
+        Node ans = null;
+        for(i = 0; i < 4; i++)
+        {
+            nwX = getNextX(temp, dt);
+            nwY = getNextY(temp, dt);
+            if((nwX != temp.getX()) || (nwY != temp.getY()))
+            {
+                if(map.isValidMove(nwY, nwX))
+                {
+                    Node temp2 = new Node(nwX, nwY, map);
+                    temp2.reevaluateDistance(map);
+                    if(!checkAdded(temp2))
+                    {
+                        if(temp2.compareEval(temp))
+                        {
+                            ans = temp2;
+                        }
+                    }
+                }
+            }
+            dt = getNextDirect(dt);
+        }
+        return ans;
     }
     
     public direction getNextDirect(direction dirt)

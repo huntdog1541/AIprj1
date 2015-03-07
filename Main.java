@@ -21,7 +21,7 @@ public class Main {
         JFrame frame = new JFrame("AI GUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        frame.getContentPane().setSize(800, 400);
+        frame.getContentPane().setSize(600, 400);
         gi = new gui(mn);
         log = new Log(gi);
         frame.getContentPane().add(gi);
