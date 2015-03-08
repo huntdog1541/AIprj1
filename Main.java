@@ -36,10 +36,11 @@ public class Main {
     {
     	int rowSize = gi.getRowNumber();
     	int columnSize = gi.getRowNumber();
-    	double percentageAgents = gi.getNumberOfAgents();
-    	double percentageObstacles = gi.getNumberOfObstacles();
+    	double percentageAgents = ((double)gi.getNumberOfAgents()/100);
+    	double percentageObstacles = ((double)gi.getNumberOfObstacles()/100);
     	boolean agentsPres = gi.isAgentsPresent();
     	
+    	log.printBoth("The number of agents is " + percentageAgents + " and obstacles " + percentageObstacles);
         
         map = new Map(rowSize, columnSize, percentageObstacles, percentageAgents, agentsPres, log);
         robby = new Robot(map, log, gi);

@@ -178,11 +178,17 @@ public class gui extends JPanel {
 
     public int getNumberOfObstacles()
     {
-        return gi.getNumObst();
+    	int ans = gi.getNumObst();
+    	addText("Number of obstacles " + ans + "\n");
+        return ans;
     }
 
     public int getNumberOfAgents()
     {
+    	int ans = gi.getNumAgents();
+    	addText("Number of obstacles " + ans + "\n");
+    	double ans2 = ((double)ans/100);
+    	addText("Number of obstacles " + ans2 + "\n");
         return gi.getNumAgents();
     }
 
