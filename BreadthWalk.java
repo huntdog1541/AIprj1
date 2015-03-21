@@ -18,7 +18,7 @@ public class BreadthWalk {
     private Log log;
 
     public BreadthWalk(Robot roy, Map mps, Log lg) {
-        robby = roy;
+        robby = roy;                    //the robot
         map = mps;
         list = new ArrayList<Node>();
         store = new ArrayList<Node>();
@@ -46,7 +46,7 @@ public class BreadthWalk {
         list.add(currentNode);
         currentIterator = 0;
     }
-
+    //the function that initializes the breadth-first search
     public void walking()
     {
         Node temp = list.get(0);
@@ -70,15 +70,8 @@ public class BreadthWalk {
         if(temp.isTreasure())
             log.printBoth("has treasure");
         log.printBoth("Entry X : " + map.getEntryX() + " and Y: " + map.getEntryY());
-        /*
-        while(!temp.isEntry())
-        {
-            addNext();
-            list.remove(0);
-            store.add(temp);
-            temp = list.get(0);
-        }*/
     }
+
 
     public boolean searchingTreasure(Node temp, boolean running)
     {
@@ -215,17 +208,13 @@ public class BreadthWalk {
     public void checkAllNodes()
     {
         int tempIterator1 = 0, tempIterator2 = 0;
-        int oldX, oldY, nwX, nwY;
         if((store.size() == 0) || (list.size() == 0))
             return;
         Node outerNode = store.get(tempIterator1);
         Node innerNode;
         Node temp;
-        boolean exit = false;
         while((outerNode != null) && (tempIterator2 < store.size()))
         {
-            oldX = outerNode.getX();
-            oldY = outerNode.getY();
             tempIterator2 = 0;
             innerNode = list.get(tempIterator2);
             while((innerNode != null) && (tempIterator2 < list.size()))
