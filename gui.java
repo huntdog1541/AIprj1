@@ -25,6 +25,8 @@ public class gui extends JPanel {
     private boolean breadthWalk;        //is the breadth walk button set
     private boolean hillClimbWalk;      //is the hill-climbing walk button set
     private boolean randomRestartWalk;  //is the random restart button set
+    private boolean astarWalk;
+    private boolean iterativeDeepingWalk;
     private boolean active;             //has the run button been pressed
     private boolean rowNum;             //has the row number been entered
     private boolean colNum;             //has the column number been entered
@@ -45,6 +47,8 @@ public class gui extends JPanel {
         breadthWalk = false;        //is the breadth walk button set
         hillClimbWalk = false;      //is the hill-climbing walk button set
         randomRestartWalk = false;  //is the random restart button set
+        astarWalk = false;
+        iterativeDeepingWalk = false;
         active = true;             //has the run button been pressed
         rowNum = false;             //has the row number been entered
         colNum = false;             //has the column number been entered
@@ -176,6 +180,16 @@ public class gui extends JPanel {
 		this.colNum = colNum;
 	}
 
+    public boolean isAstarWalk()
+    {
+        return astarWalk;
+    }
+
+    public boolean isIterativeDeepingWalk()
+    {
+        return iterativeDeepingWalk;
+    }
+
     public int getNumberOfObstacles()
     {
     	int ans = gi.getNumObst();
@@ -255,6 +269,8 @@ public class gui extends JPanel {
         private JRadioButton jcomp9;
         private JRadioButton jcomp10;
         private JRadioButton jcomp11;
+        private JRadioButton aStarbutton;
+        private JRadioButton iterDeepbutton;
         private JButton jcomp12;
         private JLabel jcomp13;
         private JLabel jcomp14;
@@ -287,6 +303,8 @@ public class gui extends JPanel {
             jcomp8 = new JRadioButton("Breadth Walk", breadthWalk);
             jcomp9 = new JRadioButton("Hill-Climbing Walk", hillClimbWalk);
             jcomp10 = new JRadioButton("Random Restart Hill-Climbing", randomRestartWalk);
+            aStarbutton = new JRadioButton("A*", astarWalk);
+            iterDeepbutton = new JRadioButton("Iterative Deeping", iterativeDeepingWalk);
             jcomp11 = new JRadioButton("All Walks", allWalk);
             jcomp12 = new JButton("Run");
             jcomp13 = new JLabel("Percentage of Obstacles:");
@@ -367,6 +385,8 @@ public class gui extends JPanel {
             add(jcomp8);
             add(jcomp9);
             add(jcomp10);
+            add(aStarbutton);
+            add(iterDeepbutton);
             add(jcomp11);
             add(jcomp12);
             add(jcomp13);
@@ -397,6 +417,8 @@ public class gui extends JPanel {
             jcomp8.setBounds(435, 185, 100, 25);
             jcomp9.setBounds(435, 215, 134, 25);
             jcomp10.setBounds(435, 245, 194, 25);
+            aStarbutton.setBounds(435, 300, 100, 25);
+            iterDeepbutton.setBounds(435, 325, 150, 25);
             jcomp11.setBounds(435, 275, 100, 25);
             jcomp12.setBounds(40, 395, 100, 25);
             jcomp13.setBounds(455, 75, 131, 25);
@@ -405,15 +427,15 @@ public class gui extends JPanel {
             numObst.setBounds (580, 75, 100, 25);
             jcomp17.setBounds(450, 40, 250, 25);
             jcomp18.setBounds(165, 130, 200, 25);
-            jcomp19.setBounds(165, 285, 100, 25);
-            jcomp20.setBounds(165, 320, 100, 25);
-            agentColor.setBounds(165, 320, 100, 50);
-            jcomp21.setBounds(280, 320, 100, 25);
-            entryColor.setBounds(280, 320, 100, 50);
-            jcomp22.setBounds(395, 320, 100, 25);
-            treasureColor.setBounds(395, 320, 100, 50);
-            jcomp23.setBounds(525, 320, 100, 25);
-            obstacleColor.setBounds(525, 320, 100, 50);
+            jcomp19.setBounds(165, 300, 100, 25);
+            jcomp20.setBounds(165, 385, 100, 25);
+            agentColor.setBounds(165, 375, 100, 50);
+            jcomp21.setBounds(280, 385, 100, 25);
+            entryColor.setBounds(280, 375, 100, 50);
+            jcomp22.setBounds(395, 385, 100, 25);
+            treasureColor.setBounds(395, 375, 100, 50);
+            jcomp23.setBounds(525, 385, 100, 25);
+            obstacleColor.setBounds(525, 375, 100, 50);
 
 
         }
