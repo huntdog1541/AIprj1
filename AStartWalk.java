@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Created by Admin on 3/22/2015.
  */
@@ -16,7 +18,7 @@ public class AStartWalk {
     private boolean foundAgent;
     private Log log;
 
-     public DepthWalk(Robot roy, Map mps, Log lg) {
+     public AStarWalk(Robot roy, Map mps, Log lg) {
         robby = roy;
         map = mps;
         store = new ArrayList<Node>();
