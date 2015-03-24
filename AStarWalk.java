@@ -3,7 +3,7 @@ import java.util.ArrayList;
 /**
  * Created by Admin on 3/22/2015.
  */
-public class AStartWalk {
+public class AStarWalk {
 
 	private Robot robby;
     private Map map;
