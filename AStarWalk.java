@@ -42,8 +42,10 @@ public class AStarWalk {
     {
         log.printResponse("Walking started");
         Node temp = currentNode;
+        NodeNumber++;
         double bstPt = 1000.0;
-        running = false;
+        running = true;
+        robby.increaseStep(temp.getX(), temp.getY());
         //if current nodes does not have treasure or agent
         while(searchingTreasure(temp, running))
         {
@@ -54,8 +56,14 @@ public class AStarWalk {
             updatePath();
             bstPt = findBestPath();
             temp = getNextBest(bstPt);
-            robby.increaseStep(temp.getX(), temp.getY());
-            log.printResponse("Inside Loop");
+            if(temp == null)
+            {
+            	System.out.println("Exit loop");
+            	return;
+            }
+            //robby.increaseStep(temp.getX(), temp.getY());
+            
+            //log.printResponse("Inside Loop");
             bstPt = 10000.0;
         }
         if(running == false)
@@ -135,8 +143,12 @@ public class AStarWalk {
     {
         if(map.isValidMove(nwY, nwX))
         {
-            Node tp = new Node(nwX, nwY, map);
-            list.add(tp);
+        	if(map.isMoveBlocked(nwY, nwX))
+        	{
+        		Node tp = new Node(nwX, nwY, map);
+                list.add(tp);
+                //robby.increaseStep(tp.getX(), tp.getY());
+        	}
         }
     }
 
