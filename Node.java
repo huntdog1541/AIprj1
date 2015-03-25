@@ -8,6 +8,8 @@ public class Node {
 	private boolean obstacle;
 	private boolean entry;
     private double eval;
+	private double bestPath;
+	private int interator;
 	
 	public Node(int numX, int numY)
 	{
@@ -132,6 +134,16 @@ public class Node {
         eval = Math.sqrt(Math.pow((x-treX), 2) + Math.pow((y-treY), 2));
         //map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
     }
+
+	public void updatePathCost(int pathNumber)
+	{
+		bestPath = eval + (double)pathNumber;
+	}
+
+	public double getBestPath()
+	{
+		return bestPath;
+	}
 	
 	public boolean evalObstacle()
 	{

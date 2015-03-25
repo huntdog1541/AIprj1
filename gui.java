@@ -370,6 +370,8 @@ public class gui extends JPanel {
             jcomp17.addActionListener(new defaultObstacleRadio());
             jcomp18.addActionListener(new defaultAgentsRadio());
             jcomp5.addActionListener(new AgentsPresent());
+            aStarbutton.addActionListener(new AStarWalkRadio());
+            iterDeepbutton.addActionListener(new IterativeDeepWalkRadio());
 
             checkNumObst();
             checkNumAgents();
@@ -454,6 +456,10 @@ public class gui extends JPanel {
             if(jcomp10.isSelected())
                 ans = true;
             if(jcomp11.isSelected())
+                ans = true;
+            if(aStarbutton.isSelected())
+                ans = true;
+            if(iterDeepbutton.isSelected())
                 ans = true;
             return ans;
         }
@@ -725,6 +731,20 @@ public class gui extends JPanel {
         public void actionPerformed(ActionEvent e)
         {
             randomRestartWalk = !randomRestartWalk;
+        }
+    }
+
+    public class AStarWalkRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e) {
+            astarWalk = !astarWalk;
+        }
+    }
+
+    public class IterativeDeepWalkRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e){
+            iterativeDeepingWalk = !iterativeDeepingWalk;
         }
     }
 
