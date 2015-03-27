@@ -164,6 +164,7 @@ public class AStarWalk {
         currentNode = new Node(xpost, ypost);
         list.add(currentNode);
         NodeNumber = 0;
+        System.out.println("The home is at " + xpost + " : " + ypost);
     }
 
     
