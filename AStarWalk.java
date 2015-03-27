@@ -61,6 +61,7 @@ public class AStarWalk {
             	System.out.println("Exit loop");
             	return;
             }
+            NodeNumber++;
             //robby.increaseStep(temp.getX(), temp.getY());
             
             //log.printResponse("Inside Loop");
@@ -143,7 +144,7 @@ public class AStarWalk {
     {
         if(map.isValidMove(nwY, nwX))
         {
-        	if(map.isMoveBlocked(nwY, nwX))
+        	if(!map.isMoveBlocked(nwY, nwX))
         	{
         		Node tp = new Node(nwX, nwY, map);
                 list.add(tp);
