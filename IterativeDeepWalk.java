@@ -9,6 +9,7 @@ public class IterativeDeepWalk {
     private Map map;
     private ArrayList<Node> store;
     private ArrayList<Node> list;
+    private ArrayList<Node> currentList;
     private int xpost;
     private int ypost;
     private Node currentNode;
@@ -23,6 +24,7 @@ public class IterativeDeepWalk {
         map = mps;
         store = new ArrayList<Node>();
         list = new ArrayList<Node>();
+        currentList = new ArrayList<Node>();
         xpost = 0;
         ypost = 0;
         getHome();
