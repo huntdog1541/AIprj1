@@ -245,6 +245,8 @@ public class gui extends JPanel {
             gi.disableBreadth(true);
             gi.disableHillClimb(true);
             gi.disableRandomRestart(true);
+            gi.disableAStar(true);
+            gi.disableIterativeDeep(true);
         }
         else
         {
@@ -253,6 +255,8 @@ public class gui extends JPanel {
             gi.disableBreadth(false);
             gi.disableHillClimb(false);
             gi.disableRandomRestart(false);
+            gi.disableAStar(false);
+            gi.disableIterativeDeep(false);
         }
     }
 
@@ -419,9 +423,9 @@ public class gui extends JPanel {
             jcomp8.setBounds(435, 185, 100, 25);
             jcomp9.setBounds(435, 215, 134, 25);
             jcomp10.setBounds(435, 245, 194, 25);
-            aStarbutton.setBounds(435, 300, 100, 25);
-            iterDeepbutton.setBounds(435, 325, 150, 25);
-            jcomp11.setBounds(435, 275, 100, 25);
+            aStarbutton.setBounds(435, 275, 100, 25);
+            iterDeepbutton.setBounds(435, 300, 150, 25);
+            jcomp11.setBounds(435, 325, 100, 25);
             jcomp12.setBounds(40, 395, 100, 25);
             jcomp13.setBounds(455, 75, 131, 25);
             jcomp14.setBounds(170, 155, 110, 25);
@@ -579,6 +583,28 @@ public class gui extends JPanel {
             else
                 jcomp10.setEnabled(true);
 
+        }
+
+        public void disableAStar(boolean ans)
+        {
+            if(ans)
+            {
+                aStarbutton.setEnabled(false);
+                aStarbutton.setSelected(false);
+            }
+            else
+                aStarbutton.setEnabled(true);
+        }
+
+        public void disableIterativeDeep(boolean ans)
+        {
+            if(ans)
+            {
+                iterDeepbutton.setEnabled(false);
+                iterDeepbutton.setSelected(false);
+            }
+            else
+                iterDeepbutton.setEnabled(true);
         }
 
         public void checkActive()

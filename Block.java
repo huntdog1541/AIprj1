@@ -160,8 +160,14 @@ public class Block {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g); 
              //drawing(g);
-            if(number > 0)
-            	g.drawString(Integer.toString(number), 10, 20);
+            if(number > 0) {
+				Color cl = g.getColor();
+				g.setColor(new Color(.3f, .4f, .5f, .6f));
+				g.fillRect(0, 0,30, 30);
+				g.setColor(cl);
+				g.drawString(Integer.toString(number), 10, 20);
+
+			}
             
             String temp = "( ";
             temp = temp.concat(Integer.toString(ypost));
