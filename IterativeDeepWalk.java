@@ -20,6 +20,7 @@ public class IterativeDeepWalk {
     private boolean hitWall;
     private boolean foundAgent;
     private boolean running;
+    private Stats sta;
     private Log log;
 
      public IterativeDeepWalk(Robot roy, Map mps, Log lg) {
@@ -37,6 +38,8 @@ public class IterativeDeepWalk {
         hitWall = false;
         foundAgent = false;
         log = lg;
+        sta = new Stats("Iterative Deepening");
+        sta.setAgentsPresent(map.isSetAgentsOn());
         getHome();
         lg.printResponse("Iterative Deep Walk\n");
         this.walking();
@@ -71,6 +74,7 @@ public class IterativeDeepWalk {
             System.out.println("The limit depth is " + limitDepth);
         }
         report();
+        sta.printstats();
     }
 
     public boolean searchingTreasure(Node temp, boolean running)
@@ -194,9 +198,21 @@ public class IterativeDeepWalk {
     public void report()
     {
         if(foundAgent)
+        {
             log.printBoth("Robby dead found agent");
+            sta.setFails(true);
+            if(foundTreasure)
+            {
+                sta.setStepsHome(robby.getSteps());
+            }
+            else
+                sta.setStepsTreasure(robby.getSteps());
+        }
         if(foundTreasure)
+        {
             log.printBoth("Robby found treasure");
+            sta.setStepsTreasure(robby.getSteps());
+        }
     }
 
     public void exploreNode(Node temp)

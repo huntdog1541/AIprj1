@@ -57,7 +57,16 @@ public class Map {
 	{
 		arry[entryY][entryX].setEntry(true);
 	}
-	
+
+
+	public boolean isSetAgentsOn() {
+		return setAgentsOn;
+	}
+
+	public void setSetAgentsOn(boolean setAgentsOn) {
+		this.setAgentsOn = setAgentsOn;
+	}
+
 	//defines the boundary
 	public int getboundary()
 	{

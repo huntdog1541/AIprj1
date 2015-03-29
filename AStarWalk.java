@@ -170,7 +170,7 @@ public class AStarWalk {
 
     
     public void checkAllNodes()
-    {
+        {
         int tempIterator1 = 0, tempIterator2 = 0;
         int oldX, oldY, nwX, nwY;
         if((store.size() == 0) || (list.size() == 0))
