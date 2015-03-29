@@ -133,7 +133,7 @@ public class Movement {
         {
             long IterativeDeepWalkTime = Runtime.getRuntime().totalMemory();
             log.printBoth("The start memory is " + IterativeDeepWalkTime);
-            walk4 = new RandomRestartWalk(robby, map, log);
+            walk6 = new IterativeDeepWalk(robby, map, log);
             long endWalkTime = Runtime.getRuntime().totalMemory();
             IterativeDeepWalkTime = endWalkTime - IterativeDeepWalkTime;
             log.printBoth("The end memory is " + endWalkTime);

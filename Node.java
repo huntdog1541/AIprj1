@@ -7,6 +7,9 @@ public class Node {
 	private boolean agent;
 	private boolean obstacle;
 	private boolean entry;
+	private boolean added;
+	private int depth;
+	private boolean explored;
     private double eval;
 	private double bestPath;
 	private int interator;
@@ -20,12 +23,16 @@ public class Node {
 		obstacle = false;
 		entry = false;
         eval = 0;
+		added = false;
+		explored = false;
 	}
 	
 	public Node(int numX, int numY, Map map)
 	{
 		x = numX;
 		y = numY;
+		added = false;
+		explored = false;
         if(map.isValidMove(x, y))
         {
             treasure = map.hasStepTreasure(y, x);
@@ -41,6 +48,31 @@ public class Node {
             entry = false;
         }
         evaluateDistance(map);
+	}
+
+
+	public Node(int numX, int numY, Map map, int dpth)
+	{
+		x = numX;
+		y = numY;
+		added = false;
+		depth = dpth;
+		explored = false;
+		if(map.isValidMove(x, y))
+		{
+			treasure = map.hasStepTreasure(y, x);
+			agent = map.isStandingOnAgent(y, x);
+			obstacle = map.isMoveBlocked(y, x);
+			entry = map.steppingOnEntry(y, x);
+		}
+		else
+		{
+			treasure = false;
+			agent = false;
+			obstacle = false;
+			entry = false;
+		}
+		evaluateDistance(map);
 	}
 
     public boolean isMatch(int OldX, int OldY){
@@ -164,4 +196,28 @@ public class Node {
     		ans = false;
     	return ans;
     }
+
+	public boolean isAdded() {
+		return added;
+	}
+
+	public void setAdded(boolean added) {
+		this.added = added;
+	}
+
+	public int getDepth() {
+		return depth;
+	}
+
+	public void setDepth(int depth) {
+		this.depth = depth;
+	}
+
+	public boolean isExplored() {
+		return explored;
+	}
+
+	public void setExplored(boolean explored) {
+		this.explored = explored;
+	}
 }

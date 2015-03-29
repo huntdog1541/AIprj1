@@ -84,7 +84,7 @@ public class Map {
 					ans = true;
 			}
 			arry[tempY][tempX].setObstacle(true);
-			log.printBoth("Set Obstacle at " + tempX + " and " + tempY);
+			log.printBoth("Set Obstacle at " + tempY + " and " + tempX);
 			//arry[tempX][tempY].printBlockInfo();
 			ans = false;
 		}
@@ -105,7 +105,7 @@ public class Map {
 		}
 		arry[tempY][tempX].setTreasure(true);
 
-		log.printBoth("Set Treasure at " + tempY + " and " + tempX);
+		log.printBoth("Set Treasure at Y " + tempY + " and X " + tempX);
         treasureX = tempX;
         treasureY = tempY;
 		//arry[tempX][tempY].printBlockInfo();
@@ -127,7 +127,7 @@ public class Map {
 					ans = true;
 			}
 			arry[tempY][tempX].setAgent(true);
-			log.printBoth("Set Agent at " + tempX + " and " + tempY);
+			log.printBoth("Set Agent at " + tempY + " and " + tempX);
 			//arry[tempX][tempY].printBlockInfo();
 			ans = false;
 		}
@@ -278,7 +278,7 @@ public class Map {
                     ans = false;
             }
         }
-        log.printBoth("Entry Y is " + entryY + " entryx is "+ entryX);
+        log.printBoth("Entry X is " + entryX + " Entry Y is "+ entryY);
         setEntry();
     }
     
