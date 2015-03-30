@@ -15,9 +15,11 @@ public class AStarWalk {
     private Node currentNode;
     private int NodeNumber;
     private boolean foundTreasure;
+    private boolean foundHome;
     private boolean hitWall;
     private boolean foundAgent;
     private boolean running;
+    private Stats stat;
     private Log log;
 
      public AStarWalk(Robot roy, Map mps, Log lg) {
@@ -33,9 +35,12 @@ public class AStarWalk {
         foundTreasure = false;
         hitWall = false;
         foundAgent = false;
+         foundHome = false;
         log = lg;
+         stat = new Stats("A* Walk");
         lg.printResponse("A* Walk\n");
         this.walking();
+         stat.printstats();
     }
 
     public void walking()
@@ -45,14 +50,14 @@ public class AStarWalk {
         NodeNumber++;
         double bstPt = 1000.0;
         running = true;
-        robby.increaseStep(temp.getX(), temp.getY());
+        robby.increaseStep(temp.getY(), temp.getX());
         //if current nodes does not have treasure or agent
         while(searchingTreasure(temp, running))
         {
+            addNodes(direction.WEST, temp);
+            addNodes(direction.EAST, temp);
             addNodes(direction.NORTH, temp);
             addNodes(direction.SOUTH, temp);
-            addNodes(direction.EAST, temp);
-            addNodes(direction.WEST, temp);
             updatePath();
             bstPt = findBestPath();
             temp = getNextBest(bstPt);
@@ -67,15 +72,34 @@ public class AStarWalk {
             //log.printResponse("Inside Loop");
             bstPt = 10000.0;
         }
-        if(running == false)
-            System.out.println("Stopped running");
-        if(foundTreasure == true)
-            System.out.println("Found Treasure");
-        if(foundAgent == true)
-            System.out.println("Found Agent");
+        reportTreasure();
+        NodeNumber = 1;
+        list.clear();
+        temp = new Node(map.getTreasureX(), map.getTreasureY());
+        temp.reevaluateDistance(map);
         //then place possible nodes in queue
         //calculate the best possible movement
+        while(searchingHome(temp, running))
+        {
+            addHomeNodes(direction.WEST, temp);
+            addHomeNodes(direction.EAST, temp);
+            addHomeNodes(direction.NORTH, temp);
+            addHomeNodes(direction.SOUTH, temp);
+            updatePath();
+            bstPt = findBestPath();
+            temp = getNextBest(bstPt);
+            if(temp == null)
+            {
+                System.out.println("Exit loop");
+                return;
+            }
+            NodeNumber++;
+            //robby.increaseStep(temp.getX(), temp.getY());
 
+            //log.printResponse("Inside Loop");
+            bstPt = 10000.0;
+        }
+        reportHome();
     }
 
     public void updatePath()
@@ -120,6 +144,18 @@ public class AStarWalk {
             return true;
     }
 
+    public boolean searchingHome(Node temp, boolean running)
+    {
+        if(running == false)
+            return false;
+        else if(temp.isAgent())
+            return false;
+        else if(temp.isEntry())
+            return false;
+        else
+            return true;
+    }
+
     public void addNodes(direction dirt, Node temp)
     {
         if(dirt == direction.NORTH)
@@ -140,6 +176,40 @@ public class AStarWalk {
         }
     }
 
+    public void addHomeNodes(direction dirt, Node temp)
+    {
+        if(dirt == direction.NORTH)
+        {
+            addNextHomeNode((temp.getX()), (temp.getY() - 1));
+        }
+        else if(dirt == direction.SOUTH)
+        {
+            addNextHomeNode((temp.getX()), (temp.getY() + 1));
+        }
+        else if(dirt == direction.EAST)
+        {
+            addNextHomeNode((temp.getX() + 1), (temp.getY()));
+        }
+        else if(dirt == direction.WEST)
+        {
+            addNextHomeNode((temp.getX() - 1), (temp.getY()));
+        }
+    }
+
+    public void addNextHomeNode(int nwX, int nwY)
+    {
+        if(map.isValidMove(nwY, nwX))
+        {
+            if(!map.isMoveBlocked(nwY, nwX))
+            {
+                Node tp = new Node(nwX, nwY, map);
+                tp.reevaluateDistance(map);
+                list.add(tp);
+                robby.increaseStep(tp.getY(), tp.getX());
+            }
+        }
+    }
+
     public void addNextNode(int nwX, int nwY)
     {
         if(map.isValidMove(nwY, nwX))
@@ -148,7 +218,7 @@ public class AStarWalk {
         	{
         		Node tp = new Node(nwX, nwY, map);
                 list.add(tp);
-                //robby.increaseStep(tp.getX(), tp.getY());
+                robby.increaseStep(tp.getY(), tp.getX());
         	}
         }
     }
@@ -166,6 +236,56 @@ public class AStarWalk {
         list.add(currentNode);
         NodeNumber = 0;
         System.out.println("The home is at " + xpost + " : " + ypost);
+    }
+
+    public void reportTreasure()
+    {
+        if(foundTreasure)
+        {
+            stat.setStepsTreasure(robby.getSteps());
+            robby.resetSteps();
+            log.printBoth("Robby found Treasure");
+        }
+        else if(foundAgent)
+        {
+            stat.setTotalSteps(robby.getSteps());
+            stat.setFails(true);
+            robby.resetSteps();
+            log.printBoth("Robby found Agent");
+        }
+        else if(running == false)
+        {
+            stat.setTotalSteps(robby.getSteps());
+            stat.setFails(true);
+            robby.resetSteps();
+            log.printBoth("Robby ran out of steps");
+        }
+
+    }
+
+    public void reportHome()
+    {
+        if(foundHome)
+        {
+            stat.setStepsHome(robby.getSteps());
+            robby.resetSteps();
+            log.printBoth("Robby found home");
+        }
+        else if(foundAgent)
+        {
+            stat.setTotalSteps(robby.getSteps());
+            stat.setFails(true);
+            robby.resetSteps();
+            log.printBoth("Robby found Agent");
+        }
+        else if(running == false)
+        {
+            stat.setTotalSteps(robby.getSteps());
+            stat.setFails(true);
+            robby.resetSteps();
+            log.printBoth("Robby ran out of steps");
+        }
+
     }
 
     
