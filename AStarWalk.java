@@ -35,12 +35,12 @@ public class AStarWalk {
         foundTreasure = false;
         hitWall = false;
         foundAgent = false;
-         foundHome = false;
+        foundHome = false;
         log = lg;
-         stat = new Stats("A* Walk");
+        stat = new Stats("A* Walk", map);
         lg.printResponse("A* Walk\n");
         this.walking();
-         stat.printstats();
+        stat.printstats();
     }
 
     public void walking()
@@ -58,6 +58,8 @@ public class AStarWalk {
             addNodes(direction.EAST, temp);
             addNodes(direction.NORTH, temp);
             addNodes(direction.SOUTH, temp);
+            findTreasure();
+            findAgent();
             updatePath();
             bstPt = findBestPath();
             temp = getNextBest(bstPt);
@@ -100,6 +102,24 @@ public class AStarWalk {
             bstPt = 10000.0;
         }
         reportHome();
+    }
+
+    public  void findTreasure()
+    {
+        for(Node temp : list)
+        {
+            if(temp.isTreasure())
+                foundTreasure = true;
+        }
+    }
+
+    public void findAgent()
+    {
+        for(Node temp : list)
+        {
+           if(temp.isAgent())
+               foundAgent = true;
+        }
     }
 
     public void updatePath()

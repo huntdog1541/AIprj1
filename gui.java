@@ -27,9 +27,14 @@ public class gui extends JPanel {
     private boolean randomRestartWalk;  //is the random restart button set
     private boolean astarWalk;
     private boolean iterativeDeepingWalk;
+    private boolean heuristicWalk;
     private boolean active;             //has the run button been pressed
     private boolean rowNum;             //has the row number been entered
     private boolean colNum;             //has the column number been entered
+    private int rowSize;
+    private int columnSize;
+    private double agentNumb;
+    private double obstacleNumb;
     private Main main;
 
 
@@ -49,9 +54,14 @@ public class gui extends JPanel {
         randomRestartWalk = false;  //is the random restart button set
         astarWalk = false;
         iterativeDeepingWalk = false;
+        heuristicWalk = false;
         active = true;             //has the run button been pressed
         rowNum = false;             //has the row number been entered
         colNum = false;             //has the column number been entered
+        rowSize = 0;
+        columnSize = 0;
+        agentNumb = 0.0;
+        obstacleNumb = 0.0;
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         addComponents();
     }
@@ -190,6 +200,14 @@ public class gui extends JPanel {
         return iterativeDeepingWalk;
     }
 
+    public boolean isHeuristicWalk() {
+        return heuristicWalk;
+    }
+
+    public void setHeuristicWalk(boolean heuristicWalk) {
+        this.heuristicWalk = heuristicWalk;
+    }
+
     public int getNumberOfObstacles()
     {
     	int ans = gi.getNumObst();
@@ -247,6 +265,7 @@ public class gui extends JPanel {
             gi.disableRandomRestart(true);
             gi.disableAStar(true);
             gi.disableIterativeDeep(true);
+            gi.disableHeuristicWalk(true);
         }
         else
         {
@@ -257,6 +276,7 @@ public class gui extends JPanel {
             gi.disableRandomRestart(false);
             gi.disableAStar(false);
             gi.disableIterativeDeep(false);
+            gi.disableHeuristicWalk(false);
         }
     }
 
@@ -275,6 +295,7 @@ public class gui extends JPanel {
         private JRadioButton jcomp11;
         private JRadioButton aStarbutton;
         private JRadioButton iterDeepbutton;
+        private JRadioButton heuristicbutton;
         private JButton jcomp12;
         private JLabel jcomp13;
         private JLabel jcomp14;
@@ -334,6 +355,8 @@ public class gui extends JPanel {
             treasureColor.setBackground(Color.YELLOW);
             entryColor = new JPanel();
             entryColor.setBackground(Color.BLUE);
+            heuristicbutton = new JRadioButton("Heuristic Search", heuristicWalk);
+
 
             //set components properties
             jcomp1.setToolTipText("Enter in the number of rows");
@@ -351,6 +374,7 @@ public class gui extends JPanel {
             numObst.setToolTipText("Enter the number of obstacles");
             jcomp17.setToolTipText("Click here to accept the number of obstacles");
             jcomp18.setToolTipText("Click here to accept the default number of agents");
+            heuristicbutton.setToolTipText("Click here to accept for the Heuristic walk");
 
 
             //adjust size and set layout
@@ -376,6 +400,7 @@ public class gui extends JPanel {
             jcomp5.addActionListener(new AgentsPresent());
             aStarbutton.addActionListener(new AStarWalkRadio());
             iterDeepbutton.addActionListener(new IterativeDeepWalkRadio());
+            heuristicbutton.addActionListener(new HeuristicWalkRadio());
 
             checkNumObst();
             checkNumAgents();
@@ -406,6 +431,7 @@ public class gui extends JPanel {
             add(jcomp21);
             add(jcomp22);
             add(jcomp23);
+            add(heuristicbutton);
             add(agentColor);
             add(obstacleColor);
             add(treasureColor);
@@ -425,7 +451,8 @@ public class gui extends JPanel {
             jcomp10.setBounds(435, 245, 194, 25);
             aStarbutton.setBounds(435, 275, 100, 25);
             iterDeepbutton.setBounds(435, 300, 150, 25);
-            jcomp11.setBounds(435, 325, 100, 25);
+            heuristicbutton.setBounds(435, 325, 150, 25);
+            jcomp11.setBounds(435, 350, 100, 25);
             jcomp12.setBounds(40, 395, 100, 25);
             jcomp13.setBounds(455, 75, 131, 25);
             jcomp14.setBounds(170, 155, 110, 25);
@@ -443,7 +470,8 @@ public class gui extends JPanel {
             jcomp23.setBounds(525, 385, 100, 25);
             obstacleColor.setBounds(525, 375, 100, 50);
 
-
+            rowsAns.setText("5");
+            columnAns.setText("5");
         }
 
         public boolean checkRadioSelected()
@@ -464,6 +492,8 @@ public class gui extends JPanel {
             if(aStarbutton.isSelected())
                 ans = true;
             if(iterDeepbutton.isSelected())
+                ans = true;
+            if(heuristicbutton.isSelected())
                 ans = true;
             return ans;
         }
@@ -607,14 +637,25 @@ public class gui extends JPanel {
                 iterDeepbutton.setEnabled(true);
         }
 
+        public void disableHeuristicWalk(boolean ans)
+        {
+            if(ans)
+            {
+                heuristicbutton.setEnabled(false);
+                heuristicbutton.setSelected(false);
+            }
+            else
+                heuristicbutton.setEnabled(true);
+        }
+
         public void checkActive()
         {
             System.out.println("check active: " + active);
             if(!active)
             {
                 System.out.println("Active is " + active);
-                rowsAns.setEnabled(false);
-                //columnAns.setEnabled(false);
+                rowsAns.setEnabled(true);
+                columnAns.setEnabled(true);
                 jcomp5.setEnabled(false);
                 jcomp6.setEnabled(false);
                 jcomp7.setEnabled(false);
@@ -636,7 +677,7 @@ public class gui extends JPanel {
             {
                     System.out.println("Active is " + active);
                     rowsAns.setEnabled(true);
-                    //columnAns.setEnabled(true);
+                    columnAns.setEnabled(true);
                     jcomp5.setEnabled(true);
                     jcomp6.setEnabled(true);
                     jcomp7.setEnabled(true);
@@ -774,6 +815,14 @@ public class gui extends JPanel {
         }
     }
 
+    public class HeuristicWalkRadio implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            heuristicWalk = !heuristicWalk;
+        }
+    }
+
     public class defaultObstacleRadio implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -797,5 +846,7 @@ public class gui extends JPanel {
             agentsPresent = !agentsPresent;
         }
     }
+
+
 
 }

@@ -12,6 +12,7 @@ public class Stats {
 	public int stepsHome;
 	private String walkType;
 	private fieldresults fld;
+	private Map map;
 
 	public Stats() {
 		runs = 0;
@@ -21,6 +22,18 @@ public class Stats {
 	}
 
 	public Stats(String type) {
+		walkType = type;
+		runs = 0;
+		success = false;
+		fails = false;
+		totalSteps = 0;
+		agentsPresent = false;
+		stepsTreasure = 0;
+		stepsHome = 0;
+	}
+
+	public Stats(String type, Map mp) {
+		map = mp;
 		walkType = type;
 		runs = 0;
 		success = false;
@@ -111,9 +124,18 @@ public class Stats {
 	}
 
 	public void printstats() {
-		fld = new fieldresults();
+		fld = new fieldresults(this);
 		updateSteps();
-		fld.publish();
+		publish();
+	}
+
+	public void publish() {
+		updateResults();
+		JFrame frame = new JFrame(walkType);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(new fieldresults(this));
+		frame.pack();
+		frame.setVisible(true);
 	}
 
 	/*public void publish()
@@ -130,6 +152,14 @@ public class Stats {
 		frame.setVisible(true);
 	}*/
 
+	public void updateResults()
+	{
+		if(map.isSetAgentsOn())
+			agentsPresent = true;
+		else
+			agentsPresent = false;
+	}
+
 	public class fieldresults extends JPanel {
 		private JTextField treasureSteps;
 		private JTextField homeSteps;
@@ -137,9 +167,10 @@ public class Stats {
 		private JTextField agentsPrest;
 		private JTextField successt;
 		private JTextField failt;
+		private Stats stat;
 
 
-		public fieldresults() {
+		public fieldresults(Stats temp) {
 			//construct components
 			treasureSteps = new JTextField(5);
 			homeSteps = new JTextField(5);
@@ -147,6 +178,7 @@ public class Stats {
 			agentsPrest = new JTextField(5);
 			successt = new JTextField(5);
 			failt = new JTextField(5);
+			stat = temp;
 
 			treasureSteps.setText("Steps to Treasure " + stepsTreasure);
 			homeSteps.setText("Steps to Home " + stepsHome);
@@ -154,7 +186,6 @@ public class Stats {
 			agentsPrest.setText("Agents present " + agentsPresent);
 			successt.setText("Success is " + success);
 			failt.setText("Failure is " + fails);
-
 
 			//adjust size and set layout
 			setPreferredSize(new Dimension(936, 499));
@@ -175,16 +206,9 @@ public class Stats {
 			successt.setBounds(40, 135, 250, 25);
 			failt.setBounds(40, 170, 250, 25);
 			totalStps.setBounds(40, 210, 250, 25);
+
 		}
 
-
-		public void publish() {
-			JFrame frame = new JFrame(walkType);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.getContentPane().add(new fieldresults());
-			frame.pack();
-			frame.setVisible(true);
-		}
 	}
 
 }

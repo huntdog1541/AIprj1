@@ -38,10 +38,15 @@ public class Main {
     	int columnSize = gi.getRowNumber();
     	double percentageAgents = ((double)gi.getNumberOfAgents()/100);
     	double percentageObstacles = ((double)gi.getNumberOfObstacles()/100);
+		double totalAgent = Math.floor((percentageAgents)*(rowSize * rowSize));
+		double totalObstacles = Math.floor((percentageObstacles)*(rowSize * rowSize));
     	boolean agentsPres = gi.isAgentsPresent();
+		int totAgent = (int)totalAgent;
+		int totObstcle = (int)totalObstacles;
     	
     	log.printBoth("The number of agents is " + percentageAgents + " and obstacles " + percentageObstacles);
-        
+		log.printBoth("The total number of agents is " + totAgent + " and obstacles " + totObstcle);
+        log.printBoth("The number of rows is " + rowSize + " and columnSize " + columnSize);
         map = new Map(rowSize, columnSize, percentageObstacles, percentageAgents, agentsPres, log);
         robby = new Robot(map, log, gi);
         robby.setWalking();

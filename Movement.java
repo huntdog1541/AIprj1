@@ -8,6 +8,7 @@ public class Movement {
 	public RandomRestartWalk walk4;
     public AStarWalk walk5;
     public IterativeDeepWalk walk6;
+    public HeuristicWalk walk7;
     public Graphs graph1;
     public Graphs graph2;
     public Graphs graph3;
@@ -15,6 +16,7 @@ public class Movement {
     public Graphs graph5;
     public Graphs graph6;
     public Graphs graph7;
+    public Graphs graph8;
     private Log log;
     private gui gi;
 	
@@ -65,6 +67,9 @@ public class Movement {
         walk6 = new IterativeDeepWalk(robby, map, log);
         graph7 = new Graphs(map, "Iterative Deepening Walk");
         map.resetMapSteps();
+        walk7 = new HeuristicWalk(robby, map, log);
+        graph8 = new Graphs(map, "Heuristic Walk");
+        map.resetMapSteps();
     }
 
     public void selectiveWalk(Robot robby, Map map)
@@ -84,7 +89,7 @@ public class Movement {
             walk1 = new DepthWalk(robby, map, log);
             DepthWalkTime = Runtime.getRuntime().totalMemory() - DepthWalkTime;
             log.printBoth("The total memory for Depth Walk is " + DepthWalkTime);
-            graph1 = new Graphs(map, "Depth Walk");
+            graph2 = new Graphs(map, "Depth Walk");
             map.resetMapSteps();
         }
         if(gi.isBreadthWalk())
@@ -93,7 +98,7 @@ public class Movement {
             walk2 = new BreadthWalk(robby, map, log);
             BreadthWalkTime = Runtime.getRuntime().totalMemory() - BreadthWalkTime;
             log.printBoth("The total memory for Breadth Walk is " + BreadthWalkTime);
-            graph1 = new Graphs(map, "Breadth Walk");
+            graph3 = new Graphs(map, "Breadth Walk");
             map.resetMapSteps();
         }
         if(gi.isHillClimbWalk())
@@ -102,7 +107,7 @@ public class Movement {
             walk3 = new HillClimbingWalk(robby, map, log);
             HillClimbWalkTime = Runtime.getRuntime().totalMemory() - HillClimbWalkTime;
             log.printBoth("The total memory for Hill Climbing Walk is " + HillClimbWalkTime);
-            graph1 = new Graphs(map, "Hill-Climbing Walk");
+            graph4 = new Graphs(map, "Hill-Climbing Walk");
             map.resetMapSteps();
         }
         if(gi.isRandomRestartWalk())
@@ -114,7 +119,7 @@ public class Movement {
             RandomRestartWalkTime = endWalkTime - RandomRestartWalkTime;
             log.printBoth("The end memory is " + endWalkTime);
             log.printBoth("The total memory for Random Restart Walk is " + RandomRestartWalkTime);
-            graph1 = new Graphs(map, "Random Restart Hill-Climbing Walk");
+            graph5 = new Graphs(map, "Random Restart Hill-Climbing Walk");
             map.resetMapSteps();
         }
         if(gi.isAstarWalk())
@@ -126,7 +131,7 @@ public class Movement {
             AStarWalkTime = endWalkTime - AStarWalkTime;
             log.printBoth("The end memory is " + endWalkTime);
             log.printBoth("The total memory for A * Walk is " + AStarWalkTime);
-            graph1 = new Graphs(map, "AStar Walk");
+            graph6 = new Graphs(map, "AStar Walk");
             map.resetMapSteps();
         }
         if(gi.isIterativeDeepingWalk())
@@ -138,7 +143,19 @@ public class Movement {
             IterativeDeepWalkTime = endWalkTime - IterativeDeepWalkTime;
             log.printBoth("The end memory is " + endWalkTime);
             log.printBoth("The total memory for Iterative Deepening Walk is " + IterativeDeepWalkTime);
-            graph1 = new Graphs(map, "Iterative Deepening Walk");
+            graph7 = new Graphs(map, "Iterative Deepening Walk");
+            map.resetMapSteps();
+        }
+        if(gi.isHeuristicWalk())
+        {
+            long IterativeDeepWalkTime = Runtime.getRuntime().totalMemory();
+            log.printBoth("The start memory is " + IterativeDeepWalkTime);
+            walk7 = new HeuristicWalk(robby, map, log);
+            long endWalkTime = Runtime.getRuntime().totalMemory();
+            IterativeDeepWalkTime = endWalkTime - IterativeDeepWalkTime;
+            log.printBoth("The end memory is " + endWalkTime);
+            log.printBoth("The total memory for Iterative Deepening Walk is " + IterativeDeepWalkTime);
+            graph8 = new Graphs(map, "Iterative Deepening Walk");
             map.resetMapSteps();
         }
     }

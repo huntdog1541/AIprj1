@@ -38,7 +38,7 @@ public class IterativeDeepWalk {
         hitWall = false;
         foundAgent = false;
         log = lg;
-        sta = new Stats("Iterative Deepening");
+        sta = new Stats("Iterative Deepening", map);
         sta.setAgentsPresent(map.isSetAgentsOn());
         getHome();
         lg.printResponse("Iterative Deep Walk\n");
