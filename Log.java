@@ -12,6 +12,14 @@ public class Log {
     private gui display;
     private StringBuilder sb;
     private PrintWriter output;
+    private boolean blindWalkOn;
+    private boolean BreadthWalkOn;
+    private boolean depthWalkOn;
+    private boolean hillclimbingWalkOn;
+    private boolean randomrestartWalkOn;
+    private boolean astarWalkOn;
+    private boolean iterativedeepWalkOn;
+    private boolean heuristicWalkOn;
 
     public Log()
     {
@@ -22,7 +30,14 @@ public class Log {
     {
         display = gi;
         //output = new PrintWriter("output.txt");
-
+        blindWalkOn = false;
+        BreadthWalkOn = false;
+        depthWalkOn = false;
+        hillclimbingWalkOn = false;
+        randomrestartWalkOn = false;
+        astarWalkOn = false;
+        iterativedeepWalkOn = false;
+        heuristicWalkOn = false;
     }
 
     public void printResponse(String msg)
@@ -79,4 +94,6 @@ public class Log {
         display.addText(temp);
         display.addText("\n");
     }
+
+
 }
