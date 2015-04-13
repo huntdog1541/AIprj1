@@ -9,6 +9,7 @@ public class HeuristicWalk {
     private Map map;
     private ArrayList<Node> store;
     private ArrayList<Node> list;
+    private ArrayList<Node> possibleMoves;
     private int pathCost;
     private int xpost;
     private int ypost;
@@ -32,6 +33,7 @@ public class HeuristicWalk {
         map = mps;
         store = new ArrayList<Node>();
         list = new ArrayList<Node>();
+        possibleMoves = new ArrayList<Node>();
         xpost = 0;
         ypost = 0;
         pathCost = 0;
@@ -42,19 +44,290 @@ public class HeuristicWalk {
         foundAgent = false;
         foundHome = false;
         log = lg;
-        stat = new Stats("Heuristic Walk");
+        stat = new Stats("Heuristic Walk", map);
         lg.printResponse("Heuristic Walk\n");
         this.walking();
         stat.printstats();
     }
 
+
     public void walking()
     {
+        log.printResponse("Walking started");
+        Node temp = currentNode;
+        NodeNumber++;
+        double bstPt = 1000.0;
+        running = true;
+        robby.increaseStep(temp.getY(), temp.getX());
+        //if current nodes does not have treasure or agent
+        while(searchingTreasure(temp, running))
+        {
+            temp = getNextNode(temp);
+            findTreasure();
+            findAgent();
+            updatePath();
+            bstPt = findBestPath();
+            temp = getNextBest(bstPt);
+            if(temp == null)
+            {
+                System.out.println("Exit loop");
+                return;
+            }
+            NodeNumber++;
+            bstPt = 10000.0;
+        }
+        reportTreasure();
+        NodeNumber = 1;
+        list.clear();
+        temp = new Node(map.getTreasureX(), map.getTreasureY());
+        temp.reevaluateDistance(map);
+        //then place possible nodes in queue
+        //calculate the best possible movement
+        while(searchingHome(temp, running))
+        {
+
+            updatePath();
+            bstPt = findBestPath();
+            temp = getNextBest(bstPt);
+            if(temp == null)
+            {
+                System.out.println("Exit loop");
+                return;
+            }
+            NodeNumber++;
+            //robby.increaseStep(temp.getX(), temp.getY());
+
+            //log.printResponse("Inside Loop");
+            bstPt = 10000.0;
+        }
+        reportHome();
+    }
+
+    public  void findTreasure()
+    {
+        for(Node temp : list)
+        {
+            if(temp.isTreasure())
+                foundTreasure = true;
+        }
+    }
+
+    public void findAgent()
+    {
+        for(Node temp : list)
+        {
+            if(temp.isAgent())
+                foundAgent = true;
+        }
+    }
+
+    public Node getNextNode(Node temp)
+    {
+        Node ans = null;
+        int i = 0;
+        addNodes(direction.NORTH, temp);
+        addNodes(direction.SOUTH, temp);
+        addNodes(direction.EAST, temp);
+        addNodes(direction.WEST, temp);
+        for(Node tp : possibleMoves)
+        {
+            if(tp != null)
+            {
+                if(ans == null)
+                    ans = possibleMoves.get(i);
+                else if(ans.getConstraitsNumb() > possibleMoves.get(++i).getConstraitsNumb())
+                {
+                    ans = possibleMoves.get(i);
+                }
+            }
+        }
+        possibleMoves.clear();
+        return ans;
+    }
+
+    public void updatePath()
+    {
+        for(Node temp : list)
+        {
+            temp.updatePathCost(NodeNumber);
+        }
+    }
+
+    public double findBestPath()
+    {
+        double ans = 1000.0;
+        for(Node temp : list)
+        {
+            if(temp.getBestPath() < ans)
+                ans = temp.getBestPath();
+        }
+        return ans;
+    }
+
+    public Node getNextBest(double bstPath)
+    {
+        for(Node temp : list)
+        {
+            if(temp.getBestPath() == bstPath) {
+                return list.remove(list.indexOf(temp));
+            }
+        }
+        return null;
+    }
+
+    public boolean searchingTreasure(Node temp, boolean running)
+    {
+        if(running == false)
+            return false;
+        else if(temp.isAgent())
+            return false;
+        else if(temp.isTreasure())
+            return false;
+        else
+            return true;
+    }
+
+    public boolean searchingHome(Node temp, boolean running)
+    {
+        if(running == false)
+            return false;
+        else if(temp.isAgent())
+            return false;
+        else if(temp.isEntry())
+            return false;
+        else
+            return true;
+    }
+
+    public void addNodes(direction dirt, Node temp)
+    {
+        if(dirt == direction.NORTH)
+        {
+            addNextNode((temp.getX()), (temp.getY()-1));
+        }
+        else if(dirt == direction.SOUTH)
+        {
+            addNextNode((temp.getX()), (temp.getY()+1));
+        }
+        else if(dirt == direction.EAST)
+        {
+            addNextNode((temp.getX()+1), (temp.getY()));
+        }
+        else if(dirt == direction.WEST)
+        {
+            addNextNode((temp.getX()-1), (temp.getY()));
+        }
+    }
+
+    public void addHomeNodes(direction dirt, Node temp)
+    {
+        if(dirt == direction.NORTH)
+        {
+            addNextHomeNode((temp.getX()), (temp.getY() - 1));
+        }
+        else if(dirt == direction.SOUTH)
+        {
+            addNextHomeNode((temp.getX()), (temp.getY() + 1));
+        }
+        else if(dirt == direction.EAST)
+        {
+            addNextHomeNode((temp.getX() + 1), (temp.getY()));
+        }
+        else if(dirt == direction.WEST)
+        {
+            addNextHomeNode((temp.getX() - 1), (temp.getY()));
+        }
+    }
+
+    public void addNextHomeNode(int nwX, int nwY)
+    {
+        if(map.isValidMove(nwY, nwX))
+        {
+            if(!map.isMoveBlocked(nwY, nwX))
+            {
+                Node tp = new Node(nwX, nwY, map);
+                tp.reevaluateDistance(map);
+                possibleMoves.add(tp);
+                robby.increaseStep(tp.getY(), tp.getX());
+            }
+        }
+    }
+
+    public void addNextNode(int nwX, int nwY)
+    {
+        if(map.isValidMove(nwY, nwX))
+        {
+            if(!map.isMoveBlocked(nwY, nwX))
+            {
+                Node tp = new Node(nwX, nwY, map);
+                possibleMoves.add(tp);
+                robby.increaseStep(tp.getY(), tp.getX());
+            }
+        }
+    }
+
+
+    public enum direction
+    {
+        NORTH, SOUTH, EAST, WEST
+    }
+    public void getHome()
+    {
+        xpost = map.getEntryX();
+        ypost = map.getEntryY();
+        currentNode = new Node(xpost, ypost);
+        list.add(currentNode);
+        NodeNumber = 0;
+        System.out.println("The home is at " + xpost + " : " + ypost);
+    }
+
+    public void reportTreasure()
+    {
+        if(foundTreasure)
+        {
+            stat.setStepsTreasure(robby.getSteps());
+            robby.resetSteps();
+            log.printBoth("Robby found Treasure");
+        }
+        else if(foundAgent)
+        {
+            stat.setTotalSteps(robby.getSteps());
+            stat.setFails(true);
+            robby.resetSteps();
+            log.printBoth("Robby found Agent");
+        }
+        else if(running == false)
+        {
+            stat.setTotalSteps(robby.getSteps());
+            stat.setFails(true);
+            robby.resetSteps();
+            log.printBoth("Robby ran out of steps");
+        }
 
     }
 
-    public void getHome()
+    public void reportHome()
     {
+        if(foundHome)
+        {
+            stat.setStepsHome(robby.getSteps());
+            robby.resetSteps();
+            log.printBoth("Robby found home");
+        }
+        else if(foundAgent)
+        {
+            stat.setTotalSteps(robby.getSteps());
+            stat.setFails(true);
+            robby.resetSteps();
+            log.printBoth("Robby found Agent");
+        }
+        else if(running == false)
+        {
+            stat.setTotalSteps(robby.getSteps());
+            stat.setFails(true);
+            robby.resetSteps();
+            log.printBoth("Robby ran out of steps");
+        }
 
     }
 

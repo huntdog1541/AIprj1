@@ -154,8 +154,8 @@ public class Movement {
             long endWalkTime = Runtime.getRuntime().totalMemory();
             IterativeDeepWalkTime = endWalkTime - IterativeDeepWalkTime;
             log.printBoth("The end memory is " + endWalkTime);
-            log.printBoth("The total memory for Iterative Deepening Walk is " + IterativeDeepWalkTime);
-            graph8 = new Graphs(map, "Iterative Deepening Walk");
+            log.printBoth("The total memory for Heuristic Walk is " + IterativeDeepWalkTime);
+            graph8 = new Graphs(map, "Heuristic Walk");
             map.resetMapSteps();
         }
     }

@@ -13,6 +13,7 @@ public class Node {
     private double eval;
 	private double bestPath;
 	private int interator;
+	private int constraitsNumb;
 	
 	public Node(int numX, int numY)
 	{
@@ -25,6 +26,7 @@ public class Node {
         eval = 0;
 		added = false;
 		explored = false;
+		constraitsNumb = 10;
 	}
 	
 	public Node(int numX, int numY, Map map)
@@ -33,6 +35,7 @@ public class Node {
 		y = numY;
 		added = false;
 		explored = false;
+		constraitsNumb = 10;
         if(map.isValidMove(x, y))
         {
             treasure = map.hasStepTreasure(y, x);
@@ -48,6 +51,7 @@ public class Node {
             entry = false;
         }
         evaluateDistance(map);
+		genConstraitsNumb();
 	}
 
 
@@ -58,6 +62,7 @@ public class Node {
 		added = false;
 		depth = dpth;
 		explored = false;
+		constraitsNumb = 10;
 		if(map.isValidMove(x, y))
 		{
 			treasure = map.hasStepTreasure(y, x);
@@ -73,6 +78,7 @@ public class Node {
 			entry = false;
 		}
 		evaluateDistance(map);
+		genConstraitsNumb();
 	}
 
     public boolean isMatch(int OldX, int OldY){
@@ -219,5 +225,21 @@ public class Node {
 
 	public void setExplored(boolean explored) {
 		this.explored = explored;
+	}
+
+	public void genConstraitsNumb()
+	{
+		if(agent)
+			constraitsNumb++;
+		if(obstacle)
+			constraitsNumb++;
+	}
+
+	public int getConstraitsNumb() {
+		return constraitsNumb;
+	}
+
+	public void setConstraitsNumb(int constraitsNumb) {
+		this.constraitsNumb = constraitsNumb;
 	}
 }
