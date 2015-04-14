@@ -233,12 +233,12 @@ public class Node {
 	public void genConstraitsNumb()
 	{
 		if(agent)
-			constraitsNumb++;
+			constraitsNumb = constraitsNumb + 5;
 		if(obstacle)
-			constraitsNumb++;
+			constraitsNumb = constraitsNumb + 5;
 	}
 
-	public int getConstraitsNumb() {
+	public double getConstraitsNumb() {
 		return constraitsNumb;
 	}
 }
