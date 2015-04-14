@@ -13,7 +13,7 @@ public class Node {
     private double eval;
 	private double bestPath;
 	private int interator;
-	private int constraitsNumb;
+	private double constraitsNumb;
 	
 	public Node(int numX, int numY)
 	{
@@ -50,8 +50,8 @@ public class Node {
             obstacle = false;
             entry = false;
         }
+        genConstraitsNumb();
         evaluateDistance(map);
-		genConstraitsNumb();
 	}
 
 
@@ -77,8 +77,9 @@ public class Node {
 			obstacle = false;
 			entry = false;
 		}
-		evaluateDistance(map);
 		genConstraitsNumb();
+		evaluateDistance(map);
+		
 	}
 
     public boolean isMatch(int OldX, int OldY){
@@ -155,6 +156,7 @@ public class Node {
         treX = map.getTreasureX();
         treY = map.getTreasureY();
         eval = Math.sqrt(Math.pow((x-treX), 2) + Math.pow((y-treY), 2));
+        constraitsNumb = constraitsNumb + eval;
         //map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
     }
 
@@ -170,6 +172,7 @@ public class Node {
         treX = map.getEntryX();
         treY = map.getEntryY();
         eval = Math.sqrt(Math.pow((x-treX), 2) + Math.pow((y-treY), 2));
+        constraitsNumb = constraitsNumb + eval;
         //map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);
     }
 
@@ -237,9 +240,5 @@ public class Node {
 
 	public int getConstraitsNumb() {
 		return constraitsNumb;
-	}
-
-	public void setConstraitsNumb(int constraitsNumb) {
-		this.constraitsNumb = constraitsNumb;
 	}
 }

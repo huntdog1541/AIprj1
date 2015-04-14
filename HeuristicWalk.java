@@ -62,7 +62,8 @@ public class HeuristicWalk {
         //if current nodes does not have treasure or agent
         while(searchingTreasure(temp, running))
         {
-            temp = getNextNode(temp);
+            addNodes(temp);
+            temp = getNextNode();
             robby.increaseStep(temp.getY(), temp.getX());
             findTreasure();
             findAgent();
@@ -112,14 +113,19 @@ public class HeuristicWalk {
         }
     }
 
-    public Node getNextNode(Node temp)
+    public void addNodes(Node temp)
     {
-        Node ans = null;
-        int i = 0;
+        
         addNodes(direction.NORTH, temp);
         addNodes(direction.SOUTH, temp);
         addNodes(direction.EAST, temp);
         addNodes(direction.WEST, temp);
+    }
+
+    public Node getNextNode()
+    {
+        Node ans = null;
+        int i = 0;
         for(Node tp : possibleMoves)
         {
             if(tp != null)
@@ -135,6 +141,7 @@ public class HeuristicWalk {
         possibleMoves.clear();
         return ans;
     }
+
 
     public void updatePath()
     {
@@ -239,6 +246,7 @@ public class HeuristicWalk {
             if(!map.isMoveBlocked(nwY, nwX))
             {
                 Node tp = new Node(nwX, nwY, map);
+                tp.evaluateDistance(map);
                 possibleMoves.add(tp);
             }
         }
@@ -251,6 +259,7 @@ public class HeuristicWalk {
             if(!map.isMoveBlocked(nwY, nwX))
             {
                 Node tp = new Node(nwX, nwY, map);
+                tp.evaluateDistance(map);
                 possibleMoves.add(tp);
             }
         }
