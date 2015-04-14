@@ -35,7 +35,7 @@ public class Node {
 		y = numY;
 		added = false;
 		explored = false;
-		constraitsNumb = 10;
+		constraitsNumb = 0;
         if(map.isValidMove(x, y))
         {
             treasure = map.hasStepTreasure(y, x);
