@@ -163,6 +163,8 @@ public class Node {
     public void reevaluateDistance(Map map)
     {
         eval = 0;
+		constraitsNumb = 0;
+		genConstraitsNumb();
         if(evalObstacle())
         {
             //map.printInfo("The eval for Y: " + y + " X: " + x + " eval: " + eval);

@@ -65,52 +65,42 @@ public class HeuristicWalk {
             addNodes(temp);
             temp = getNextNode();
             robby.increaseStep(temp.getY(), temp.getX());
-            findTreasure();
-            findAgent();
+            findTreasure(temp);
+            findAgent(temp);
         }
         reportTreasure();
         NodeNumber = 1;
-        list.clear();
         temp = new Node(map.getTreasureX(), map.getTreasureY());
         temp.reevaluateDistance(map);
         //then place possible nodes in queue
         //calculate the best possible movement
         while(searchingHome(temp, running))
         {
-
-            updatePath();
-            bstPt = findBestPath();
-            temp = getNextBest(bstPt);
-            if(temp == null)
-            {
-                System.out.println("Exit loop");
-                return;
-            }
-            NodeNumber++;
-            //robby.increaseStep(temp.getX(), temp.getY());
-
-            //log.printResponse("Inside Loop");
-            bstPt = 10000.0;
+            addNodes(temp);
+            temp = getNextHomeNode();
+            robby.increaseStep(temp.getY(), temp.getX());
+            findTreasure(temp);
+            findAgent(temp);
         }
         reportHome();
     }
 
-    public  void findTreasure()
+    public void findHome(Node temp)
     {
-        for(Node temp : list)
-        {
-            if(temp.isTreasure())
-                foundTreasure = true;
-        }
+        if(temp.isEntry())
+            foundHome = true;
     }
 
-    public void findAgent()
+    public  void findTreasure(Node temp)
     {
-        for(Node temp : list)
-        {
-            if(temp.isAgent())
-                foundAgent = true;
-        }
+        if(temp.isTreasure())
+           foundTreasure = true;
+    }
+
+    public void findAgent(Node temp)
+    {
+        if(temp.isAgent())
+           foundAgent = true;
     }
 
     public void addNodes(Node temp)
@@ -137,6 +127,23 @@ public class HeuristicWalk {
                     ans = possibleMoves.get(i);
                 }
             }
+        }
+        possibleMoves.clear();
+        return ans;
+    }
+
+    public Node getNextHomeNode() {
+        Node ans = null;
+        int i = 0;
+        for(Node tp : possibleMoves)
+        {
+            tp.reevaluateDistance(map);
+            if(ans == null)
+                ans = possibleMoves.get(i);
+             else if(ans.getConstraitsNumb() > possibleMoves.get(++i).getConstraitsNumb())
+             {
+                ans = possibleMoves.get(i);
+             }
         }
         possibleMoves.clear();
         return ans;
@@ -310,6 +317,7 @@ public class HeuristicWalk {
         if(foundHome)
         {
             stat.setStepsHome(robby.getSteps());
+            stat.setSuccess(true);
             robby.resetSteps();
             log.printBoth("Robby found home");
         }

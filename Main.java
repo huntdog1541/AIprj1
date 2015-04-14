@@ -26,8 +26,6 @@ public class Main {
         log = new Log(gi);
         frame.getContentPane().add(gi);
         frame.pack();
-
-        
     }
 
 
