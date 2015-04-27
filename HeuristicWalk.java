@@ -11,6 +11,8 @@ public class HeuristicWalk {
     private ArrayList<Node> list;
     private ArrayList<Node> possibleMoves;
     private int pathCost;
+    private int stepsToTreasure;
+    private int stepsToHome;
     private int xpost;
     private int ypost;
     private Node currentNode;
@@ -34,6 +36,8 @@ public class HeuristicWalk {
         store = new ArrayList<Node>();
         list = new ArrayList<Node>();
         possibleMoves = new ArrayList<Node>();
+        stepsToHome = 0;
+        stepsToTreasure = 0;
         xpost = 0;
         ypost = 0;
         pathCost = 0;
@@ -59,12 +63,13 @@ public class HeuristicWalk {
         double bstPt = 1000.0;
         running = true;
         robby.increaseStep(temp.getY(), temp.getX());
-        //if current nodes does not have treasure or agent
+        stepsToTreasure++;
         while(searchingTreasure(temp, running))
         {
             addNodes(temp);
             temp = getNextNode();
             robby.increaseStep(temp.getY(), temp.getX());
+            stepsToTreasure++;
             findTreasure(temp);
             findAgent(temp);
         }
@@ -72,6 +77,7 @@ public class HeuristicWalk {
         NodeNumber = 1;
         temp = new Node(map.getTreasureX(), map.getTreasureY());
         temp.reevaluateDistance(map);
+        stepsToHome++;
         //then place possible nodes in queue
         //calculate the best possible movement
         while(searchingHome(temp, running))
@@ -79,6 +85,7 @@ public class HeuristicWalk {
             addNodes(temp);
             temp = getNextHomeNode();
             robby.increaseStep(temp.getY(), temp.getX());
+            stepsToHome++;
             findTreasure(temp);
             findAgent(temp);
         }
@@ -187,9 +194,21 @@ public class HeuristicWalk {
         if(running == false)
             return false;
         else if(temp.isAgent())
+        {
+            running = false;
             return false;
+        }
         else if(temp.isTreasure())
+        {
+            running = false;
+            foundTreasure = true;
             return false;
+        }
+        else if(robby.getSteps() > 10000)
+        {
+            running = false;
+            return false;
+        }
         else
             return true;
     }
@@ -199,9 +218,21 @@ public class HeuristicWalk {
         if(running == false)
             return false;
         else if(temp.isAgent())
+        {
+            running = false;
             return false;
+        }
         else if(temp.isEntry())
+        {
+            running = false;
+            foundHome = true;
             return false;
+        }
+        else if(robby.getSteps() > 10000)
+        {
+            running = false;
+            return false;
+        }
         else
             return true;
     }
@@ -210,19 +241,19 @@ public class HeuristicWalk {
     {
         if(dirt == direction.NORTH)
         {
-            addNextNode((temp.getX()), (temp.getY()-1));
+            addNextNode((temp.getX()), (temp.getY() - 1));
         }
         else if(dirt == direction.SOUTH)
         {
-            addNextNode((temp.getX()), (temp.getY()+1));
+            addNextNode((temp.getX()), (temp.getY() + 1));
         }
         else if(dirt == direction.EAST)
         {
-            addNextNode((temp.getX()+1), (temp.getY()));
+            addNextNode((temp.getX() + 1), (temp.getY()));
         }
         else if(dirt == direction.WEST)
         {
-            addNextNode((temp.getX()-1), (temp.getY()));
+            addNextNode((temp.getX() - 1), (temp.getY()));
         }
     }
 
@@ -291,20 +322,27 @@ public class HeuristicWalk {
     {
         if(foundTreasure)
         {
-            stat.setStepsTreasure(robby.getSteps());
+            stat.setStepsTreasure(stepsToTreasure);
             robby.resetSteps();
             log.printBoth("Robby found Treasure");
         }
         else if(foundAgent)
         {
-            stat.setTotalSteps(robby.getSteps());
+            stat.setTotalSteps(stepsToTreasure);
             stat.setFails(true);
             robby.resetSteps();
             log.printBoth("Robby found Agent");
         }
         else if(running == false)
         {
-            stat.setTotalSteps(robby.getSteps());
+            stat.setTotalSteps(stepsToTreasure);
+            stat.setFails(true);
+            robby.resetSteps();
+            log.printBoth("Robby ran out of steps");
+        }
+        else if(robby.getSteps() >= 10000)
+        {
+            stat.setTotalSteps(stepsToTreasure);
             stat.setFails(true);
             robby.resetSteps();
             log.printBoth("Robby ran out of steps");
@@ -316,13 +354,15 @@ public class HeuristicWalk {
     {
         if(foundHome)
         {
-            stat.setStepsHome(robby.getSteps());
+            stat.setStepsHome(stepsToTreasure);
+            stat.setTotalSteps(robby.getSteps());
             stat.setSuccess(true);
             robby.resetSteps();
             log.printBoth("Robby found home");
         }
         else if(foundAgent)
         {
+            stat.setStepsHome(stepsToHome);
             stat.setTotalSteps(robby.getSteps());
             stat.setFails(true);
             robby.resetSteps();
@@ -330,6 +370,7 @@ public class HeuristicWalk {
         }
         else if(running == false)
         {
+            stat.setStepsHome(stepsToHome);
             stat.setTotalSteps(robby.getSteps());
             stat.setFails(true);
             robby.resetSteps();
